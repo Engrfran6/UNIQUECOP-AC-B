@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --warm-white: 254 253 250;
+    --creamy-beige: 249 247 241;
+    --soft-taupe: 220 215 208;
+    --muted-gold: 204 156 108;
+    --dusty-rose: 198 159 159;
+    --sage-green: 168 179 158;
+    --charcoal-gray: 72 72 72;
+    --mocha-brown: 101 67 33;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-sage-green hover:bg-sage-green/90 text-warm-white px-6 py-3 rounded-md font-medium transition-colors;
+  }
+
+  .btn-secondary {
+    @apply bg-transparent border border-dusty-rose text-dusty-rose hover:bg-dusty-rose hover:text-warm-white px-6 py-3 rounded-md font-medium transition-colors;
+  }
+
+  .btn-accent {
+    @apply bg-muted-gold hover:bg-muted-gold/90 text-warm-white px-6 py-3 rounded-md font-medium transition-colors;
+  }
+
+  .card-hover {
+    @apply transition-transform duration-300 hover:scale-105 hover:shadow-lg;
+  }
+}
+
+/* Smooth scrolling performance */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Disable parallax for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  [data-parallax] {
+    transform: none !important;
+  }
+}
+
+/* Optimize for mobile */
+@media (max-width: 768px) {
+  .parallax-bg {
+    transform: none !important;
+  }
+}
+
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --warm-white: 254 253 250;
+    --creamy-beige: 249 247 241;
+    --soft-taupe: 220 215 208;
+    --muted-gold: 204 156 108;
+    --dusty-rose: 198 159 159;
+    --sage-green: 168 179 158;
+    --charcoal-gray: 72 72 72;
+    --mocha-brown: 101 67 33;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-sage-green mt-6  hover:bg-sage-green/90 text-warm-white px-6 py-3 rounded-md font-medium transition-colors;
+  }
+
+  .btn-secondary {
+    @apply bg-transparent mt-6  border border-dusty-rose text-dusty-rose hover:bg-dusty-rose hover:text-warm-white px-6 py-3 rounded-md font-medium transition-colors;
+  }
+
+  .btn-accent {
+    @apply bg-muted-gold mt-6  hover:bg-muted-gold/50 text-warm-white px-6 py-3 rounded-md font-medium transition-colors;
+  }
+
+  .card-hover {
+    @apply transition-transform mt-6  duration-300 hover:scale-105 hover:shadow-lg;
+  }
+} */
