@@ -1,130 +1,139 @@
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Image from "next/image";
-import Link from "next/link";
+import {Badge} from '@/components/ui/badge';
+import {Button} from '@/components/ui/button';
+import {Card, CardContent} from '@/components/ui/card';
+import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
+import Image from 'next/image';
+import Link from 'next/link';
+import {useMemo} from 'react';
 
-const topRatedProducts = [
+const Products = [
   {
     id: 1,
-    name: "Vanilla Amber Candle",
+    name: 'Vanilla Amber Candle',
     price: 28,
     originalPrice: 35,
-    image: "/placeholder.svg?height=300&width=300",
-    category: "Candles",
-    badge: "5.0 ★",
+    image: '/candles/c1.webp?height=300&width=300',
+    category: 'Candles',
+    badge: '5.0 ★',
     rating: 5.0,
     reviews: 127,
+    topRated: true,
   },
   {
     id: 11,
-    name: "Rose Absolute",
+    name: 'Rose Absolute',
     price: 35,
-    image: "/placeholder.svg?height=300&width=300",
-    category: "Scents",
-    badge: "4.9 ★",
+    image: '/scents/s4.webp?height=300&width=300',
+    category: 'Scents',
+    badge: '4.9 ★',
     rating: 4.9,
     reviews: 89,
+    topRated: true,
   },
   {
     id: 14,
-    name: "The Art of Slow Living",
+    name: 'The Art of Slow Living',
     price: 22,
-    image: "/placeholder.svg?height=300&width=300",
-    category: "Books",
-    badge: "4.8 ★",
+    image: '/books/b1.webp?height=300&width=300',
+    category: 'Books',
+    badge: '4.8 ★',
     rating: 4.8,
     reviews: 156,
+    topRated: true,
   },
   {
     id: 10,
-    name: "Zen Garden",
+    name: 'Zen Garden',
     price: 28,
-    image: "/placeholder.svg?height=300&width=300",
-    category: "Scents",
-    badge: "4.9 ★",
+    image: '/scents/s4.webp?height=300&width=300',
+    category: 'Scents',
+    badge: '4.9 ★',
     rating: 4.9,
     reviews: 94,
+    topRated: true,
   },
-];
 
-const bestSellingProducts = [
   {
     id: 1,
-    name: "Vanilla Amber Candle",
+    name: 'Vanilla Amber Candle',
     price: 28,
     originalPrice: 35,
-    image: "/placeholder.svg?height=300&width=300",
-    category: "Candles",
-    badge: "Best Seller",
-    soldCount: "500+ sold",
+    image: '/candles/c7.webp?height=300&width=300',
+    category: 'Candles',
+    badge: 'Best Seller',
+    soldCount: '500+ sold',
+    bestSelling: true,
   },
   {
     id: 9,
-    name: "Citrus Energizer",
+    name: 'Citrus Energizer',
     price: 20,
-    image: "/placeholder.svg?height=300&width=300",
-    category: "Scents",
-    badge: "Popular",
-    soldCount: "350+ sold",
+    image: '/scents/s2.webp?height=300&width=300',
+    category: 'Scents',
+    badge: 'Popular',
+    soldCount: '350+ sold',
+    bestSelling: true,
   },
   {
     id: 18,
-    name: "Meditation for Beginners",
+    name: 'Meditation for Beginners',
     price: 16,
-    image: "/placeholder.svg?height=300&width=300",
-    category: "Books",
-    badge: "Popular",
-    soldCount: "400+ sold",
+    image: '/books/b6.webp?height=300&width=300',
+    category: 'Books',
+    badge: 'Popular',
+    soldCount: '400+ sold',
+    bestSelling: true,
   },
   {
     id: 4,
-    name: "Lavender Dreams",
+    name: 'Lavender Dreams',
     price: 26,
-    image: "/placeholder.svg?height=300&width=300",
-    category: "Candles",
-    badge: "Trending",
-    soldCount: "300+ sold",
+    image: '/candles/c10.webp?height=300&width=300',
+    category: 'Candles',
+    badge: 'Trending',
+    soldCount: '300+ sold',
+    bestSelling: true,
   },
-];
 
-const featuredProducts = [
   {
     id: 2,
-    name: "Sandalwood Serenity",
+    name: 'Sandalwood Serenity',
     price: 32,
-    image: "/placeholder.svg?height=300&width=300",
-    category: "Candles",
-    badge: "Limited",
+    image: '/candles/c8.webp?height=300&width=300',
+    category: 'Candles',
+    badge: 'Limited',
+    featured: true,
   },
   {
     id: 7,
-    name: "Lavender Dreams Scent",
+    name: 'Lavender Dreams Scent',
     price: 22,
-    image: "/placeholder.svg?height=300&width=300",
-    category: "Scents",
-    badge: "New",
+    image: '/scents/s1.webp?height=300&width=300',
+    category: 'Scents',
+    badge: 'New',
+    featured: true,
   },
   {
     id: 13,
-    name: "Mindful Living Book",
+    name: 'Mindful Living Book',
     price: 18,
-    image: "/placeholder.svg?height=300&width=300",
-    category: "Books",
-    badge: "Featured",
+    image: '/books/b3.webp?height=300&width=300',
+    category: 'Books',
+    badge: 'Featured',
+    featured: true,
   },
   {
     id: 6,
-    name: "Rose Garden Candle",
+    name: 'Rose Garden Candle',
     price: 34,
-    image: "/placeholder.svg?height=300&width=300",
-    category: "Candles",
-    badge: "Premium",
+    image: '/candles/c9.webp?height=300&width=300',
+    category: 'Candles',
+    badge: 'Premium',
+    featured: true,
   },
 ];
 
-function ProductCard({ product }: { product: any }) {
+function ProductCard({product}: {product: any}) {
   const getProductUrl = () => {
     const category = product.category.toLowerCase();
     return `/products/${category}/${product.id}`;
@@ -136,7 +145,7 @@ function ProductCard({ product }: { product: any }) {
         <CardContent className="p-0">
           <div className="relative overflow-hidden rounded-t-lg">
             <Image
-              src={product.image || "/placeholder.svg"}
+              src={product.image || '/placeholder.svg'}
               alt={product.name}
               width={300}
               height={300}
@@ -144,16 +153,13 @@ function ProductCard({ product }: { product: any }) {
             />
             <Badge
               className="absolute top-3 left-3 bg-muted-gold/90 text-warm-white"
-              variant="secondary"
-            >
+              variant="secondary">
               {product.badge}
             </Badge>
           </div>
 
           <div className="p-4 space-y-3">
-            <div className="text-sm text-sage-green font-medium">
-              {product.category}
-            </div>
+            <div className="text-sm text-sage-green font-medium">{product.category}</div>
             <h3 className="font-semibold text-charcoal-gray group-hover:text-sage-green transition-colors">
               {product.name}
             </h3>
@@ -161,29 +167,23 @@ function ProductCard({ product }: { product: any }) {
             {product.rating && (
               <div className="flex items-center gap-2 text-sm">
                 <span className="text-muted-gold">★★★★★</span>
-                <span className="text-charcoal-gray/70">
-                  ({product.reviews} reviews)
-                </span>
+                <span className="text-charcoal-gray/70">({product.reviews} reviews)</span>
               </div>
             )}
 
             {product.soldCount && (
-              <div className="text-sm text-charcoal-gray/70">
-                {product.soldCount}
-              </div>
+              <div className="text-sm text-charcoal-gray/70">{product.soldCount}</div>
             )}
 
             <div className="flex items-center space-x-2">
-              <span className="text-lg font-bold text-charcoal-gray">
-                ${product.price}
-              </span>
+              <span className="text-lg font-bold text-charcoal-gray">${product.price}</span>
               {product.originalPrice && (
-                <span className="text-sm text-charcoal-gray/50 line-through">
+                <span className="text-sm text-red-600/90 line-through">
                   ${product.originalPrice}
                 </span>
               )}
             </div>
-            <Button className="w-full btn-accent">View Product</Button>
+            <button className="w-full btn-accent">View Product</button>
           </div>
         </CardContent>
       </Card>
@@ -192,6 +192,18 @@ function ProductCard({ product }: { product: any }) {
 }
 
 export default function TabbedProducts() {
+  const topRatedProducts = useMemo(() => {
+    return Products.filter((product) => product.topRated);
+  }, []);
+
+  const bestSellingProducts = useMemo(() => {
+    return Products.filter((product) => product.bestSelling);
+  }, []);
+
+  const featuredProducts = useMemo(() => {
+    return Products.filter((product) => product.featured);
+  }, []);
+
   return (
     <section className="py-16 bg-creamy-beige">
       <div className="container mx-auto px-4">
@@ -200,8 +212,8 @@ export default function TabbedProducts() {
             Discover Our Products
           </h2>
           <p className="text-charcoal-gray/70 max-w-2xl mx-auto">
-            Explore our carefully curated selection of top-rated, best-selling,
-            and featured products.
+            Discover our most loved selection of top-rated, best-selling, and featured, carefully
+            crafted to bring warmth and tranquility to your space.
           </p>
         </div>
 
@@ -209,20 +221,17 @@ export default function TabbedProducts() {
           <TabsList className="grid w-full grid-cols-3 bg-warm-white max-w-md mx-auto mb-8 ">
             <TabsTrigger
               value="top-rated"
-              className="data-[state=active]:bg-sage-green data-[state=active]:text-warm-white"
-            >
+              className="data-[state=active]:bg-sage-green data-[state=active]:text-warm-white">
               Top Rated
             </TabsTrigger>
             <TabsTrigger
               value="best-selling"
-              className="data-[state=active]:bg-sage-green data-[state=active]:text-warm-white"
-            >
+              className="data-[state=active]:bg-sage-green data-[state=active]:text-warm-white">
               Best Selling
             </TabsTrigger>
             <TabsTrigger
               value="featured"
-              className="data-[state=active]:bg-sage-green data-[state=active]:text-warm-white"
-            >
+              className="data-[state=active]:bg-sage-green data-[state=active]:text-warm-white">
               Featured
             </TabsTrigger>
           </TabsList>
