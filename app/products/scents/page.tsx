@@ -4,104 +4,60 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import {Pagination} from '@/components/Pagination';
 import ProductFilters from '@/components/ProductFilters';
 import ProductGrid from '@/components/ProductGrid';
+import {SearchInput} from '@/components/SearchInput';
+
+import {allProducts} from '@/data';
 
 import {usePagination} from '@/hooks/use-pagination';
 import {useProductFilter} from '@/hooks/use-products-filter';
-import {Suspense} from 'react';
-
-const initialProducts = [
-  {
-    id: 7,
-    name: 'Lavender Dreams Scent',
-    price: 22,
-    image: '/scents/s1.webp?height=400&width=400',
-    category: 'Scents',
-    badge: 'New',
-    description: 'Pure lavender essential oil for aromatherapy and relaxation',
-    type: 'Essential Oil',
-    volume: '15ml',
-    notes: 'Lavender, Bergamot',
-  },
-  {
-    id: 8,
-    name: 'Eucalyptus Mint',
-    price: 25,
-    image: '/scents/s2.webp?height=400&width=400',
-    category: 'Scents',
-    description: 'Refreshing eucalyptus with cooling mint for clarity and focus',
-    type: 'Essential Oil Blend',
-    volume: '15ml',
-    notes: 'Eucalyptus, Peppermint, Spearmint',
-  },
-  {
-    id: 9,
-    name: 'Citrus Energizer',
-    price: 20,
-    image: '/scents/s3.webp?height=400&width=400',
-    category: 'Scents',
-    badge: 'Popular',
-    description: 'Uplifting citrus blend to boost energy and mood',
-    type: 'Essential Oil Blend',
-    volume: '15ml',
-    notes: 'Orange, Lemon, Grapefruit',
-  },
-  {
-    id: 10,
-    name: 'Zen Garden',
-    price: 28,
-    image: '/scents/s4.webp?height=400&width=400',
-    category: 'Scents',
-    description: 'Meditative blend of sandalwood and frankincense',
-    type: 'Premium Blend',
-    volume: '20ml',
-    notes: 'Sandalwood, Frankincense, Cedarwood',
-  },
-  {
-    id: 11,
-    name: 'Rose Absolute',
-    price: 35,
-    image: '/scents/s5.webp?height=400&width=400',
-    category: 'Scents',
-    badge: 'Luxury',
-    description: 'Pure rose absolute for romantic and luxurious ambiance',
-    type: 'Absolute Oil',
-    volume: '10ml',
-    notes: 'Bulgarian Rose, Geranium',
-  },
-  {
-    id: 12,
-    name: 'Forest Therapy',
-    price: 24,
-    image: '/scents/s6.webp?height=400&width=400',
-    category: 'Scents',
-    description: 'Grounding forest scents for stress relief and connection to nature',
-    type: 'Essential Oil Blend',
-    volume: '15ml',
-    notes: 'Pine, Fir, Juniper',
-  },
-];
+import {useSearchStore} from '@/store/use-search-store';
+import {Suspense, useMemo} from 'react';
 
 export default function ScentsPage() {
-  const {filteredProducts, filters, updateFilters, resetFilters} = useProductFilter({
-    initialProducts,
-    filterConfig: {
-      priceField: 'price',
-      filterFields: {
-        types: 'type',
-        volumes: 'volume',
-        notes: 'notes',
+  const {isSearchOpen, closeSearch} = useSearchStore();
+  const initialProducts = useMemo(() => allProducts.scents, []);
+  const {filteredProducts, filters, updateFilters, resetFilters, isSearching, updateSearchQuery} =
+    useProductFilter({
+      initialProducts,
+      filterConfig: {
+        priceField: 'price',
+        filterFields: {
+          types: 'type',
+          volumes: 'volume',
+          notes: 'notes',
+        },
+        searchFields: ['name', 'description', 'category'],
       },
-    },
-  });
+    });
 
   const {currentItems, currentPage, totalPages, goToPage} = usePagination({
     items: filteredProducts,
     itemsPerPage: 10,
   });
 
+  if (isSearching && filteredProducts.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingSpinner />
+        <p className="text-charcoal-gray mt-4">No products found for "{filters.searchQuery}"</p>
+      </div>
+    );
+  }
+
+  const handleCloseSearch = () => {
+    updateSearchQuery('');
+    closeSearch();
+  };
+
   return (
     <div className="min-h-screen bg-warm-white">
-      {/* Hero Section */}
+      {isSearchOpen && (
+        <SearchInput
+          searchQuery={filters.searchQuery}
+          updateSearchQuery={updateSearchQuery}
+          onClose={handleCloseSearch}
+        />
+      )}
       <section className="bg-sage-green/10 py-16">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto">

@@ -4,104 +4,60 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import {Pagination} from '@/components/Pagination';
 import ProductFilters from '@/components/ProductFilters';
 import ProductGrid from '@/components/ProductGrid';
+import {SearchInput} from '@/components/SearchInput';
+
+import {allProducts} from '@/data';
 
 import {usePagination} from '@/hooks/use-pagination';
 import {useProductFilter} from '@/hooks/use-products-filter';
-import {Suspense} from 'react';
-
-const initialProducts = [
-  {
-    id: 13,
-    name: 'Mindful Living Book',
-    price: 18,
-    image: '/books/b1.webp?height=400&width=400',
-    category: 'Books',
-    badge: 'Featured',
-    description: 'A comprehensive guide to incorporating mindfulness into daily life',
-    author: 'Sarah Chen',
-    pages: 240,
-    genre: 'Self-Help',
-  },
-  {
-    id: 14,
-    name: 'The Art of Slow Living',
-    price: 22,
-    image: '/books/b6.webp?height=400&width=400',
-    category: 'Books',
-    badge: 'Bestseller',
-    description: "Discover the beauty of slowing down and savoring life's simple pleasures",
-    author: 'Emma Thompson',
-    pages: 280,
-    genre: 'Lifestyle',
-  },
-  {
-    id: 15,
-    name: 'Aromatherapy Essentials',
-    price: 25,
-    image: '/books/b2.webp?height=400&width=400',
-    category: 'Books',
-    description: 'Complete guide to essential oils and their therapeutic benefits',
-    author: 'Dr. Michael Green',
-    pages: 320,
-    genre: 'Health & Wellness',
-  },
-  {
-    id: 16,
-    name: 'Creating Sacred Spaces',
-    price: 20,
-    image: '/books/b3.webp?height=400&width=400',
-    category: 'Books',
-    badge: 'New',
-    description: 'Transform your home into a sanctuary of peace and tranquility',
-    author: 'Luna Martinez',
-    pages: 200,
-    genre: 'Home & Design',
-  },
-  {
-    id: 17,
-    name: "The Candle Maker's Guide",
-    price: 28,
-    image: '/books/b4.webp?height=400&width=400',
-    category: 'Books',
-    description: 'Learn the art of candle making from basic techniques to advanced designs',
-    author: 'James Wilson',
-    pages: 350,
-    genre: 'Crafts & Hobbies',
-  },
-  {
-    id: 18,
-    name: 'Meditation for Beginners',
-    price: 16,
-    image: '/books/b5.webp?height=400&width=400',
-    category: 'Books',
-    badge: 'Popular',
-    description: 'Simple techniques to start your meditation journey',
-    author: 'Zen Master Kai',
-    pages: 180,
-    genre: 'Spirituality',
-  },
-];
+import {useSearchStore} from '@/store/use-search-store';
+import {Suspense, useMemo} from 'react';
 
 export default function BooksPage() {
-  const {filteredProducts, filters, updateFilters, resetFilters} = useProductFilter({
-    initialProducts,
-    filterConfig: {
-      priceField: 'price',
-      filterFields: {
-        genres: 'genre',
-        authors: 'author',
-        pages: 'pages',
+  const {isSearchOpen, closeSearch} = useSearchStore();
+  const initialProducts = useMemo(() => allProducts.books, []);
+
+  const {filteredProducts, filters, updateFilters, resetFilters, isSearching, updateSearchQuery} =
+    useProductFilter({
+      initialProducts,
+      filterConfig: {
+        priceField: 'price',
+        filterFields: {
+          genres: 'genre',
+          authors: 'author',
+          pages: 'pages',
+        },
+        searchFields: ['name', 'description', 'category'],
       },
-    },
-  });
+    });
 
   const {currentItems, currentPage, totalPages, goToPage} = usePagination({
     items: filteredProducts,
     itemsPerPage: 10,
   });
+
+  if (isSearching && filteredProducts.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingSpinner />
+        <p className="text-charcoal-gray mt-4">No products found for "{filters.searchQuery}"</p>
+      </div>
+    );
+  }
+
+  const handleCloseSearch = () => {
+    updateSearchQuery('');
+    closeSearch();
+  };
   return (
     <div className="min-h-screen bg-warm-white">
-      {/* Hero Section */}
+      {isSearchOpen && (
+        <SearchInput
+          searchQuery={filters.searchQuery}
+          updateSearchQuery={updateSearchQuery}
+          onClose={handleCloseSearch}
+        />
+      )}
       <section className="bg-dusty-rose/10 py-16">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto">

@@ -18,7 +18,6 @@ export const metadata: Metadata = {
   description:
     'Discover our collection of handmade candles, premium scents, and curated books. Create the perfect ambiance for your space.',
   keywords: 'handmade candles, scented candles, aromatherapy, books, home decor',
-  generator: 'v0.dev',
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {

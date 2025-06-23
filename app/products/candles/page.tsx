@@ -4,104 +4,60 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import {Pagination} from '@/components/Pagination';
 import ProductFilters from '@/components/ProductFilters';
 import ProductGrid from '@/components/ProductGrid';
+import {SearchInput} from '@/components/SearchInput';
+import {allProducts} from '@/data';
 import {usePagination} from '@/hooks/use-pagination';
 import {useProductFilter} from '@/hooks/use-products-filter';
-import {Suspense} from 'react';
-
-const initialProducts = [
-  {
-    id: 1,
-    name: 'Vanilla Amber Candle',
-    price: 28,
-    originalPrice: 35,
-    image: '/candles/c8.webp?height=400&width=400',
-    category: 'Candles',
-    badge: 'Best Seller',
-    description: 'A warm blend of vanilla and amber creates the perfect cozy atmosphere',
-    scent: 'Vanilla & Amber',
-    burnTime: '45-50 hours',
-    size: '8 oz',
-  },
-  {
-    id: 2,
-    name: 'Sandalwood Serenity',
-    price: 32,
-    image: '/candles/c9.webp?height=400&width=400',
-    category: 'Candles',
-    badge: 'Limited',
-    description: 'Earthy sandalwood with hints of cedar for deep relaxation',
-    scent: 'Sandalwood & Cedar',
-    burnTime: '50-55 hours',
-    size: '9 oz',
-  },
-  {
-    id: 3,
-    name: 'Citrus Burst Candle',
-    price: 24,
-    image: '/candles/c7.webp?height=400&width=400',
-    category: 'Candles',
-    badge: 'New',
-    description: 'Energizing blend of orange, lemon, and grapefruit',
-    scent: 'Citrus Medley',
-    burnTime: '40-45 hours',
-    size: '7 oz',
-  },
-  {
-    id: 4,
-    name: 'Lavender Dreams',
-    price: 26,
-    image: '/candles/c10.webp?height=400&width=400',
-    category: 'Candles',
-    description: 'Pure lavender for ultimate relaxation and peaceful sleep',
-    scent: 'French Lavender',
-    burnTime: '45-50 hours',
-    size: '8 oz',
-  },
-  {
-    id: 5,
-    name: 'Forest Pine Candle',
-    price: 30,
-    image: '/candles/c5.webp?height=400&width=400',
-    category: 'Candles',
-    description: 'Fresh pine and eucalyptus bring the outdoors inside',
-    scent: 'Pine & Eucalyptus',
-    burnTime: '48-52 hours',
-    size: '8.5 oz',
-  },
-  {
-    id: 6,
-    name: 'Rose Garden Candle',
-    price: 34,
-    image: '/candles/c1.webp?height=400&width=400',
-    category: 'Candles',
-    badge: 'Premium',
-    description: 'Delicate rose petals with a touch of jasmine',
-    scent: 'Rose & Jasmine',
-    burnTime: '55-60 hours',
-    size: '10 oz',
-  },
-];
+import {useSearchStore} from '@/store/use-search-store';
+import {Suspense, useMemo} from 'react';
 
 export default function CandlesPage() {
-  const {filteredProducts, filters, updateFilters, resetFilters} = useProductFilter({
-    initialProducts,
-    filterConfig: {
-      priceField: 'price',
-      filterFields: {
-        scents: 'scent',
-        sizes: 'size',
-        burnTime: 'burnTime',
+  const {isSearchOpen, closeSearch} = useSearchStore();
+  const initialProducts = useMemo(() => allProducts.candles, []);
+
+  const {filteredProducts, filters, updateFilters, resetFilters, isSearching, updateSearchQuery} =
+    useProductFilter({
+      initialProducts,
+      filterConfig: {
+        priceField: 'price',
+        filterFields: {
+          scents: 'scent',
+          sizes: 'size',
+          burnTime: 'burnTime',
+        },
+        searchFields: ['name', 'description', 'category'],
       },
-    },
-  });
+    });
 
   const {currentItems, currentPage, totalPages, goToPage} = usePagination({
     items: filteredProducts,
     itemsPerPage: 10,
   });
 
+  if (isSearching && filteredProducts.length === 0) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingSpinner />
+        <p className="text-charcoal-gray mt-4">No products found for "{filters.searchQuery}"</p>
+      </div>
+    );
+  }
+
+  const handleCloseSearch = () => {
+    updateSearchQuery('');
+    closeSearch();
+  };
+
   return (
     <div className="min-h-screen bg-warm-white">
+      {isSearchOpen && (
+        <SearchInput
+          searchQuery={filters.searchQuery}
+          updateSearchQuery={updateSearchQuery}
+          onClose={handleCloseSearch}
+        />
+      )}
+
       <section className="bg-creamy-beige py-16">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-3xl mx-auto">
