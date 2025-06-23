@@ -1,12 +1,14 @@
 'use client';
 
+import CategoryHeader from '@/components/CategoryHeader';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import {Pagination} from '@/components/Pagination';
 import ProductFilters from '@/components/ProductFilters';
 import ProductGrid from '@/components/ProductGrid';
 import {SearchInput} from '@/components/SearchInput';
 
-import {allProducts} from '@/data';
+import {allProducts} from '@/data/data';
+import {headerData} from '@/data/headerdata';
 
 import {usePagination} from '@/hooks/use-pagination';
 import {useProductFilter} from '@/hooks/use-products-filter';
@@ -58,34 +60,7 @@ export default function ScentsPage() {
           onClose={handleCloseSearch}
         />
       )}
-      <section className="bg-sage-green/10 py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="font-playfair text-5xl font-bold text-charcoal-gray mb-6">
-              Premium Scents
-            </h1>
-            <p className="text-lg text-charcoal-gray/80 mb-8">
-              Our carefully curated collection of essential oils and fragrance blends are sourced
-              from the finest ingredients around the world. Each scent is designed to transform your
-              space and elevate your mood.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-              <div className="space-y-2">
-                <div className="text-2xl font-bold text-sage-green">Pure</div>
-                <div className="text-sm text-charcoal-gray/70">Essential Oils</div>
-              </div>
-              <div className="space-y-2">
-                <div className="text-2xl font-bold text-sage-green">Therapeutic</div>
-                <div className="text-sm text-charcoal-gray/70">Grade Quality</div>
-              </div>
-              <div className="space-y-2">
-                <div className="text-2xl font-bold text-sage-green">Ethically</div>
-                <div className="text-sm text-charcoal-gray/70">Sourced</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CategoryHeader {...headerData.scents} />
 
       {/* Products Section */}
       <section className="py-16">

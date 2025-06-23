@@ -1,12 +1,14 @@
 'use client';
 
+import CategoryHeader from '@/components/CategoryHeader';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import {Pagination} from '@/components/Pagination';
 import ProductFilters from '@/components/ProductFilters';
 import ProductGrid from '@/components/ProductGrid';
 import {SearchInput} from '@/components/SearchInput';
 
-import {allProducts} from '@/data';
+import {allProducts} from '@/data/data';
+import {headerData} from '@/data/headerdata';
 
 import {usePagination} from '@/hooks/use-pagination';
 import {useProductFilter} from '@/hooks/use-products-filter';
@@ -58,34 +60,7 @@ export default function BooksPage() {
           onClose={handleCloseSearch}
         />
       )}
-      <section className="bg-dusty-rose/10 py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="font-playfair text-5xl font-bold text-charcoal-gray mb-6">
-              Curated Books
-            </h1>
-            <p className="text-lg text-charcoal-gray/80 mb-8">
-              Thoughtfully selected books that inspire mindful living, creativity, and personal
-              growth. Each title complements our philosophy of creating peaceful, intentional
-              spaces.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-              <div className="space-y-2">
-                <div className="text-2xl font-bold text-dusty-rose">Mindful</div>
-                <div className="text-sm text-charcoal-gray/70">Living Guides</div>
-              </div>
-              <div className="space-y-2">
-                <div className="text-2xl font-bold text-dusty-rose">Creative</div>
-                <div className="text-sm text-charcoal-gray/70">Inspiration</div>
-              </div>
-              <div className="space-y-2">
-                <div className="text-2xl font-bold text-dusty-rose">Wellness</div>
-                <div className="text-sm text-charcoal-gray/70">& Self-Care</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CategoryHeader {...headerData.books} />
 
       {/* Products Section */}
       <section className="py-16">

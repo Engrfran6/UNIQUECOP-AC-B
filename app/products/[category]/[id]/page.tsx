@@ -1,5 +1,5 @@
 import ProductDetail from '@/components/ProductDetails';
-import {allProducts} from '@/data';
+import {allProducts} from '@/data/data';
 
 import {notFound} from 'next/navigation';
 import {useMemo} from 'react';
