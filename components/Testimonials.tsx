@@ -7,7 +7,7 @@ import {useEffect, useState} from 'react';
 const testimonials = [
   {
     id: 1,
-    name: 'Sarah Okoro',
+    name: 'Precious Okoro',
     location: 'Lagos, NG',
     rating: 5,
     text: "The Vanilla Amber candle has completely transformed my evening routine. The scent is absolutely divine and lasts for hours. I've already ordered three more!",
@@ -37,7 +37,7 @@ const testimonials = [
     name: 'David Thompson',
     location: 'Seattle, WA',
     rating: 5,
-    text: "Lumina's candles burn so cleanly and evenly. You can tell they're made with care and quality ingredients. The Rose Garden candle is my favorite!",
+    text: "Uniquecop AC&B's candles burn so cleanly and evenly. You can tell they're made with care and quality ingredients. The Rose Garden candle is my favorite!",
     product: 'Rose Garden Candle',
     avatar: '/placeholder.svg?height=60&width=60',
   },
@@ -55,7 +55,7 @@ const testimonials = [
     name: 'James Wilson',
     location: 'Miami, FL',
     rating: 5,
-    text: "I've tried many candle brands, but Lumina is in a league of its own. The burn time is incredible and the scents are perfectly balanced.",
+    text: "I've tried many candle brands, but Uniquecop AC&B is in a league of its own. The burn time is incredible and the wax are perfectly balanced.",
     product: 'Sandalwood Serenity',
     avatar: '/placeholder.svg?height=60&width=60',
   },
@@ -221,7 +221,7 @@ export default function Testimonials() {
         <div className="text-center mt-12">
           <p className="text-charcoal-gray/70 mb-4">Join thousands of satisfied customers</p>
           <button className="btn-accent">
-            <a href="/">Shop Now</a>
+            <a href="/products/shop">Shop Now</a>
           </button>
         </div>
       </div>

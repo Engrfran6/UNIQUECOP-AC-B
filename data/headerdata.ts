@@ -1,9 +1,13 @@
 export const headerData = {
+  allProducts: {
+    title: 'All Products',
+    description: `Discover our complete collection of handcrafted candles, premium wax melts, and curated books.`,
+  },
   candles: {
     title: 'Handcrafted Candles',
     description: `   Each candle is lovingly hand-poured using premium soy wax and natural fragrances. Our
               artisanal process ensures a clean, long-lasting burn that fills your space with
-              beautiful scents.`,
+              beautiful wax.`,
     features: [
       {
         value: '100+',
@@ -20,8 +24,8 @@ export const headerData = {
     ],
   },
 
-  scents: {
-    title: 'Premium Scents',
+  wax: {
+    title: 'Premium wax',
     description: `Our carefully curated collection of essential oils and fragrance blends are sourced
               from the finest ingredients around the world. Each scent is designed to transform your
               space and elevate your mood.`,
@@ -50,6 +54,11 @@ export const headerData = {
         label: '& Self-Care',
       },
     ],
+  },
+
+  collections: {
+    title: 'Curated Collections',
+    description: `Thoughtfully assembled collections that bring together our candles, wax, and books to create complete experiences for every mood and moment.`,
   },
 };
 export type HeaderData = typeof headerData;

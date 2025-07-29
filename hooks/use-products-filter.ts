@@ -1,5 +1,5 @@
 // hooks/use-products-filter.ts
-import {useCallback, useMemo, useState} from 'react';
+import {useCallback, useEffect, useMemo, useState} from 'react';
 
 export interface FilterOptions {
   priceRange: [number, number];
@@ -22,11 +22,26 @@ export function useProductFilter<T>({
   filterConfig,
   debounceDelay = 300,
 }: UseProductFilterProps<T>) {
+  const priceValues = useMemo(() => {
+    const prices = initialProducts.map((product) => Number(product[filterConfig.priceField]));
+    const min = Math.min(...prices);
+    const max = Math.max(...prices);
+    return [min, max] as [number, number];
+  }, [initialProducts, filterConfig.priceField]);
+
   const [filters, setFilters] = useState<FilterOptions>({
-    priceRange: [0, 100],
+    priceRange: priceValues,
     selectedOptions: {},
     searchQuery: '',
   });
+
+  useEffect(() => {
+    setFilters((prev) => ({
+      ...prev,
+      priceRange: priceValues,
+    }));
+  }, [priceValues]);
+
   const [isSearching, setIsSearching] = useState(false);
 
   const filteredProducts = useMemo(() => {
@@ -100,65 +115,3 @@ export function useProductFilter<T>({
     resetFilters,
   };
 }
-
-// import { useMemo, useState } from 'react';
-
-// export interface FilterOptions {
-//   priceRange: [number, number];
-//   selectedOptions: Record<string, string[]>;
-// }
-
-// interface UseProductFilterProps<T> {
-//   initialProducts: T[];
-//   filterConfig: {
-//     priceField: keyof T;
-//     filterFields: Record<string, keyof T>;
-//   };
-// }
-
-// export function useProductFilter<T>({initialProducts, filterConfig}: UseProductFilterProps<T>) {
-//   const [filters, setFilters] = useState<FilterOptions>({
-//     priceRange: [0, 100],
-//     selectedOptions: {},
-//   });
-
-//   const filteredProducts = useMemo(() => {
-//     let results = [...initialProducts];
-
-//     results = results.filter(
-//       (product) =>
-//         Number(product[filterConfig.priceField]) >= filters.priceRange[0] &&
-//         Number(product[filterConfig.priceField]) <= filters.priceRange[1]
-//     );
-
-//     Object.entries(filters.selectedOptions).forEach(([filterType, options]) => {
-//       if (options.length > 0 && filterConfig.filterFields[filterType]) {
-//         const fieldName = filterConfig.filterFields[filterType];
-//         results = results.filter((product) => options.includes(String(product[fieldName])));
-//       }
-//     });
-
-//     return results;
-//   }, [initialProducts, filters, filterConfig]);
-
-//   const updateFilters = (newFilters: Partial<FilterOptions>) => {
-//     setFilters((prev) => ({
-//       ...prev,
-//       ...newFilters,
-//     }));
-//   };
-
-//   const resetFilters = () => {
-//     setFilters({
-//       priceRange: [0, 100],
-//       selectedOptions: {},
-//     });
-//   };
-
-//   return {
-//     filteredProducts,
-//     filters,
-//     updateFilters,
-//     resetFilters,
-//   };
-// }

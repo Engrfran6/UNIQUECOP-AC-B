@@ -16,6 +16,7 @@ export function AddToCartButton({product}: {product: Product}) {
       id: typeof product.id === 'string' ? Number.parseInt(product.id) : product.id,
       name: product.name,
       price: product.price,
+      category: product.category,
       image: product.image || product.images?.[0] || '/placeholder.svg',
     });
 

@@ -5,9 +5,10 @@ import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
 import {Checkbox} from '@/components/ui/checkbox';
 import {Label} from '@/components/ui/label';
 import {Slider} from '@/components/ui/slider';
+import {allProducts} from '@/data/data';
 import {FilterOptions} from '@/hooks/use-products-filter';
 import {Filter} from 'lucide-react';
-import {useState} from 'react';
+import {useMemo, useState} from 'react';
 import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger} from './ui/sheet';
 
 interface ProductFiltersProps {
@@ -26,6 +27,8 @@ export default function ProductFilters({
   onResetFilters,
 }: ProductFiltersProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const products = useMemo(() => allProducts, []);
+
   const handlePriceChange = (value: number[]) => {
     onFilterChange({priceRange: value as [number, number]});
   };
@@ -48,42 +51,32 @@ export default function ProductFilters({
     switch (category) {
       case 'candles':
         return {
-          scents: ['Vanilla', 'Lavender', 'Citrus', 'Sandalwood', 'Rose', 'Pine'],
-          sizes: ['7 oz', '8 oz', '9 oz', '10 oz'],
-          burnTime: ['40-45 hours', '45-50 hours', '50-55 hours', '55-60 hours'],
+          scents: [...new Set(products.candles.map((scent) => scent.scent))],
+          sizes: [...new Set(products.candles.map((scent) => scent.size))],
+          burnTime: [...new Set(products.candles.map((scent) => scent.burnTime))],
         };
-      case 'scents':
+      case 'wax':
         return {
-          types: ['Essential Oil', 'Essential Oil Blend', 'Premium Blend', 'Absolute Oil'],
-          volumes: ['10ml', '15ml', '20ml'],
-          notes: ['Floral', 'Citrus', 'Woody', 'Herbal', 'Spicy'],
+          types: [...new Set(products.wax.map((wax) => wax.type))],
+          volumes: [...new Set(products.wax.map((wax) => wax.volume))],
+          notes: [...new Set(products.wax.map((wax) => wax.notes))],
         };
       case 'books':
         return {
-          genres: [
-            'Self-Help',
-            'Lifestyle',
-            'Health & Wellness',
-            'Home & Design',
-            'Crafts & Hobbies',
-            'Spirituality',
-          ],
-          authors: [
-            'Sarah Chen',
-            'Emma Thompson',
-            'Dr. Michael Green',
-            'Luna Martinez',
-            'James Wilson',
-            'Zen Master Kai',
-          ],
-          pages: ['Under 200', '200-300', '300-400', '400+'],
+          genres: [...new Set(products.books.map((book) => book.genre))],
+          authors: [...new Set(products.books.map((book) => book.author))],
+          pages: [...new Set(products.books.map((book) => book.pages))],
+        };
+      case 'collections':
+        return {
+          badges: [...new Set(products.collections.map((collection) => collection.badge))],
         };
       default:
         return {};
     }
   };
 
-  const filters = getFilters();
+  const filters = useMemo(() => getFilters(), [category, products]);
 
   const FilterContent = () => (
     <div className="space-y-6">
@@ -93,7 +86,8 @@ export default function ProductFilters({
         <Slider
           value={priceRange}
           onValueChange={handlePriceChange}
-          max={100}
+          min={priceRange[0]}
+          max={priceRange[1]}
           step={1}
           className="w-full bg-muted-gold rounded-lg"
         />

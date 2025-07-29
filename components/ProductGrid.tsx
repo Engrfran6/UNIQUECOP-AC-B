@@ -2,6 +2,7 @@
 
 import {Badge} from '@/components/ui/badge';
 import {Card, CardContent} from '@/components/ui/card';
+import {cn, getProductUrl} from '@/lib/utils';
 import Image from 'next/image';
 import Link from 'next/link';
 import {AddToCartButton} from './AddToCartButton';
@@ -21,16 +22,18 @@ export interface Product {
 
 interface ProductGridProps {
   products: Product[];
+  classNames?: string;
+  viewMode?: 'grid' | 'list';
 }
 
-export default function ProductGrid({products}: ProductGridProps) {
-  const getProductUrl = (product: Product) => {
-    const category = product.category.toLowerCase();
-    return `/products/${category}/${product.id}`;
-  };
-
+export default function ProductGrid({products, viewMode = 'grid', classNames}: ProductGridProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div
+      className={cn(
+        'gap-6',
+        viewMode === 'list' ? 'grid-cols-1' : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
+        classNames
+      )}>
       {products.map((product) => (
         <Link key={product.id} href={getProductUrl(product)}>
           <Card className="group card-hover bg-warm-white border-soft-taupe/20 cursor-pointer">

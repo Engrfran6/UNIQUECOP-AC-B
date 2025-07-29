@@ -56,6 +56,7 @@ export default function ProductDetail({product, relatedProducts}: ProductDetailP
         id: Number(product.id),
         name: product.name,
         price: product.price,
+        category: product.category,
         image: product.images[0],
       });
     }
@@ -210,7 +211,7 @@ export default function ProductDetail({product, relatedProducts}: ProductDetailP
               <label className="text-sm font-medium text-charcoal-gray">
                 {product.category === 'Books'
                   ? 'Format'
-                  : product.category === 'Scents'
+                  : product.category === 'wax'
                   ? 'Size'
                   : 'Color'}
                 :
@@ -296,7 +297,7 @@ export default function ProductDetail({product, relatedProducts}: ProductDetailP
                   <div className="space-y-1">
                     <div className="font-medium text-charcoal-gray">Delivery</div>
                     <div className="text-sm text-charcoal-gray/70">
-                      Estimate delivery times: 12-26 days (International), 3-6 days (United States)
+                      Estimate delivery times: 12-26 days (International), 3-6 days (Nigeria)
                     </div>
                   </div>
                 </div>
@@ -350,7 +351,7 @@ export default function ProductDetail({product, relatedProducts}: ProductDetailP
                     </h3>
                     <div className="space-y-3 text-charcoal-gray/80">
                       <p>
-                        <strong>United States:</strong> 3-6 business days via standard shipping
+                        <strong>Nigeria:</strong> 3-6 business days via standard shipping
                       </p>
                       <p>
                         <strong>International:</strong> 12-26 business days depending on location
@@ -358,7 +359,7 @@ export default function ProductDetail({product, relatedProducts}: ProductDetailP
                       <p>
                         <strong>Express Shipping:</strong> Available at checkout for faster delivery
                       </p>
-                      <p>Free shipping on orders over $75 within the United States.</p>
+                      <p>Free shipping on orders over $75 within the Nigeria.</p>
                     </div>
                   </div>
 

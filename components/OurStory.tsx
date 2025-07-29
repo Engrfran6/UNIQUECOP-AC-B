@@ -39,11 +39,11 @@ export default function OurStory() {
           <div className="max-w-4xl mx-auto text-center text-warm-white">
             <h2 className="font-playfair text-5xl md:text-6xl font-bold mb-8">Our Story</h2>
             <div className="space-y-6 mb-12">
-              <p className="text-xl md:text-2xl leading-relaxed">
-                Founded in 2019, Lumina began as a passion project in a small studio apartment. What
-                started with a simple desire to create beautiful, natural candles has grown into a
-                mindful lifestyle brand dedicated to bringing peace and tranquility into everyday
-                life.
+              <p className="text-xl md:text-xl leading-relaxed">
+                Founded in 2019, Uniquecop AC&B began as a passion project in a small studio
+                apartment. What started with a simple desire to create beautiful, natural candles
+                has grown into a mindful lifestyle brand dedicated to bringing peace and tranquility
+                into everyday life.
               </p>
               <p className="text-lg md:text-xl opacity-90 leading-relaxed">
                 Every product we create is infused with intention, crafted with care, and designed

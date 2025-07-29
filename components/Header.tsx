@@ -2,33 +2,157 @@
 
 import {Button} from '@/components/ui/button';
 import {Sheet, SheetContent, SheetTrigger} from '@/components/ui/sheet';
+import {toast} from '@/components/ui/use-toast';
+import {useAuth} from '@/contexts/AuthContext';
+import {getUserOrders, Order} from '@/lib/orders';
 import {useCartStore} from '@/store/use-cart-store';
 import {useSearchStore} from '@/store/use-search-store';
-import {Menu, Search, ShoppingBag, User} from 'lucide-react';
+import {
+  Loader2,
+  LogOut,
+  Menu,
+  Phone,
+  RotateCcw,
+  Search,
+  ShoppingBag,
+  Truck,
+  User,
+} from 'lucide-react';
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
+import {useEffect, useState} from 'react';
+import {Avatar, AvatarFallback, AvatarImage} from './ui/avatar';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu';
 
 export default function Header() {
+  const {user, isGuest, logout} = useAuth();
   const pathname = usePathname();
   const {openSearch} = useSearchStore();
 
   const items = useCartStore((state) => state.items);
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (!user) return;
+
+      try {
+        setIsLoading(true);
+        const userOrders = await getUserOrders(user.uid);
+        setOrders(userOrders);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+        toast({
+          title: 'Error loading orders',
+          description: 'Failed to load your orders. Please try again.',
+          variant: 'destructive',
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, [user, toast]);
 
   const navigation = [
+    {name: 'Shops', href: '/products/shop'},
     {name: 'Candles', href: '/products/candles'},
-    {name: 'Scents', href: '/products/scents'},
+    {name: 'Wax Melts', href: '/products/wax'},
     {name: 'Books', href: '/products/books'},
-    {name: 'Collections', href: '/collections'},
+    {name: 'Collections', href: '/products/collections'},
     {name: 'About', href: '/about'},
+  ] as const;
+
+  const topNavigation = [
+    {name: 'Contact Us', href: '/contact', icon: Phone},
+    {name: 'Shipping Info', href: '/shipping', icon: Truck},
+    {name: 'Returns', href: '/returns', icon: RotateCcw},
+    {name: 'Size Guide', href: '/size-guide'},
   ];
 
+  const searchableRoutes = [
+    navigation[0].href,
+    navigation[1].href,
+    navigation[2].href,
+    navigation[3].href,
+    navigation[4].href,
+  ];
+
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase();
+  };
+
+  const isSearch = searchableRoutes.some((route) => pathname.startsWith(route));
+
   return (
-    <header className="sticky top-0 z-50 bg-warm-white/95 backdrop-blur-sm border-b border-soft-taupe/20">
+    <header className="sticky top-0 z-50 bg-muted-gold/20 backdrop-blur-sm border-b border-soft-taupe/20">
+      {/* Top Navigation Bar */}
+      <div className="bg-sage-green/10 border-b border-sage-green/20">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between h-10 text-sm">
+            {/* Left side - Support links */}
+            <div className="hidden md:flex items-center space-x-6">
+              {topNavigation.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="flex items-center space-x-1 text-charcoal-gray/80 hover:text-sage-green transition-colors">
+                  {item.icon && <item.icon className="h-3 w-3" />}
+                  <span>{item.name}</span>
+                </Link>
+              ))}
+            </div>
+
+            {/* Center - Promotional message */}
+            <div className="text-center text-charcoal-gray/80">
+              <span className="hidden sm:inline">Free shipping on orders over $50 • </span>
+              <span>Handcrafted with love</span>
+            </div>
+
+            {/* Right side - User account links */}
+            <div className="flex items-center space-x-4">
+              {user && (
+                <Link
+                  href="/orders"
+                  className="flex items-center text-charcoal-gray/80 hover:text-sage-green transition-colors">
+                  My Orders
+                  <sup>
+                    {isLoading ? (
+                      <Loader2 size={10} className="animate-spin" />
+                    ) : (
+                      <span className="h-5 w-5 flex items-center justify-center border rounded-full bg-muted-gold text-white ml-1 text-xs">
+                        {orders.length}
+                      </span>
+                    )}
+                  </sup>
+                </Link>
+              )}
+              <Link
+                href="/our-story"
+                className="hidden md:inline text-charcoal-gray/80 hover:text-sage-green transition-colors">
+                Our Story
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="font-playfair text-2xl font-bold text-charcoal-gray">
+          <Link href="/" className="font-playfair text-sm md:text-2xl font-bold text-charcoal-gray">
             UNIQUECOP AC&B
           </Link>
 
@@ -52,24 +176,95 @@ export default function Header() {
           {/* Actions */}
           <div className="flex items-center space-x-4">
             {/* Search */}
-
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={openSearch}
-              className="text-charcoal-gray hover:text-sage-green">
-              <Search className="h-5 w-5" />
-            </Button>
-
-            {/* Account */}
-            <Link href="/account">
+            {isSearch && (
               <Button
                 variant="ghost"
                 size="icon"
+                onClick={openSearch}
                 className="text-charcoal-gray hover:text-sage-green">
-                <User className="h-5 w-5" />
+                <Search className="h-5 w-5" />
               </Button>
-            </Link>
+            )}
+
+            {/* Account */}
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={user.photoURL || ''} alt={user.displayName || ''} />
+                      <AvatarFallback className="bg-sage-green text-warm-white">
+                        {getInitials(user.displayName || user.email || 'U')}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56 bg-white mt-4" align="end" forceMount>
+                  <div className="flex items-center justify-start gap-2 p-2">
+                    <div className="flex flex-col space-y-1 leading-none">
+                      {user.displayName && <p className="font-medium">{user.displayName}</p>}
+                      {user.email && (
+                        <p className="w-[200px] truncate text-sm text-muted-foreground">
+                          {user.email}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/account" className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Account</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/orders" className="cursor-pointer">
+                      <ShoppingBag className="mr-2 h-4 w-4" />
+                      <span>Orders</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={logout} className="cursor-pointer">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Sign out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : isGuest ? (
+              <div className="flex items-center gap-2">
+                <span className="flex items-center text-sm text-charcoal-gray/70">
+                  <User className="h-5 w-5" />
+                  Guest
+                </span>
+                <Link href="/auth/signin">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-sage-green hover:text-sage-green/80">
+                    Sign In
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="flex items-center gap-8">
+                <Link href="/auth/signin">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-sage-green hover:text-sage-green/80 transition-colors font-medium text-lg">
+                    Sign In
+                  </Button>
+                </Link>
+                <Link href="/auth/signup">
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="text-dusty-rose hover:text-dusty-rose/80 transition-colors font-medium text-lg">
+                    Sign Up
+                  </Button>
+                </Link>
+              </div>
+            )}
 
             {/* Cart */}
             <Link href="/cart" className="relative">
@@ -99,15 +294,24 @@ export default function Header() {
                     <Link
                       key={item.name}
                       href={item.href}
-                      className={`relative text-charcoal-gray hover:text-muted-gold transition-colors font-medium text-lg ${
-                        pathname.startsWith(item.href) ? 'text-muted-gold' : ''
-                      }`}>
+                      className="text-charcoal-gray hover:text-muted-gold transition-colors font-medium text-lg">
                       {item.name}
-                      {pathname.startsWith(item.href) && (
-                        <span className="absolute left-0 -bottom-1 w-full h-0.5 bg-muted-gold"></span>
-                      )}
                     </Link>
                   ))}
+                  {!user && !isGuest && (
+                    <>
+                      <Link
+                        href="/auth/signin"
+                        className="text-sage-green hover:text-sage-green/80 transition-colors font-medium text-lg">
+                        Sign In
+                      </Link>
+                      <Link
+                        href="/auth/signup"
+                        className="text-dusty-rose hover:text-dusty-rose/80 transition-colors font-medium text-lg">
+                        Sign Up
+                      </Link>
+                    </>
+                  )}
                 </nav>
               </SheetContent>
             </Sheet>

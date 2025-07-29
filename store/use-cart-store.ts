@@ -2,11 +2,12 @@
 import {create} from 'zustand';
 import {persist} from 'zustand/middleware';
 
-interface CartItem {
+export interface CartItem {
   id: number;
   name: string;
   price: number;
   quantity: number;
+  category: string;
   image: string;
 }
 
@@ -17,6 +18,8 @@ interface CartState {
   removeItem: (id: number) => void;
   updateQuantity: (id: number, quantity: number) => void;
   clearCart: () => void;
+  setPendingClearCart: (pending: boolean) => void;
+  pendingClearCart?: boolean;
 }
 
 export const useCartStore = create<CartState>()(
@@ -24,6 +27,7 @@ export const useCartStore = create<CartState>()(
     (set) => ({
       items: [],
       total: 0,
+      pendingClearCart: false,
 
       addItem: (item) =>
         set((state) => {
@@ -55,7 +59,7 @@ export const useCartStore = create<CartState>()(
           };
         }),
 
-      updateQuantity: (id, quantity) =>
+      updateQuantity: (id: number, quantity: number) =>
         set((state) => {
           const newItems = state.items
             .map((i) => (i.id === id ? {...i, quantity} : i))
@@ -67,7 +71,9 @@ export const useCartStore = create<CartState>()(
           };
         }),
 
-      clearCart: () => set({items: [], total: 0}),
+      clearCart: () => set({items: [], total: 0, pendingClearCart: false}),
+      setPendingClearCart: (pending: boolean) =>
+        set((state) => ({...state, pendingClearCart: pending})),
     }),
     {
       name: 'cart-storage',

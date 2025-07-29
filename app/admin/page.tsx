@@ -1,31 +1,37 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Badge } from "@/components/ui/badge"
-import { Trash2, Edit, Plus } from "lucide-react"
+import {Badge} from '@/components/ui/badge';
+import {Button} from '@/components/ui/button';
+import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
+import {Input} from '@/components/ui/input';
+import {Label} from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
+import {Textarea} from '@/components/ui/textarea';
+import {Edit, Plus, Trash2} from 'lucide-react';
+import {useState} from 'react';
 
 export default function AdminDashboard() {
   const [products, setProducts] = useState([
-    { id: 1, name: "Vanilla Amber Candle", category: "Candles", price: 28, stock: 15 },
-    { id: 2, name: "Lavender Dreams Scent", category: "Scents", price: 22, stock: 8 },
-    { id: 3, name: "Mindful Living Book", category: "Books", price: 18, stock: 12 },
-  ])
+    {id: 1, name: 'Vanilla Amber Candle', category: 'Candles', price: 28, stock: 15},
+    {id: 2, name: 'Lavender Dreams Scent', category: 'wax', price: 22, stock: 8},
+    {id: 3, name: 'Mindful Living Book', category: 'Books', price: 18, stock: 12},
+  ]);
 
   const [newProduct, setNewProduct] = useState({
-    name: "",
-    category: "",
-    price: "",
-    stock: "",
-    description: "",
-    image: "",
-  })
+    name: '',
+    category: '',
+    price: '',
+    stock: '',
+    description: '',
+    image: '',
+  });
 
   const handleAddProduct = () => {
     if (newProduct.name && newProduct.category && newProduct.price) {
@@ -35,21 +41,23 @@ export default function AdminDashboard() {
         category: newProduct.category,
         price: Number.parseFloat(newProduct.price),
         stock: Number.parseInt(newProduct.stock) || 0,
-      }
-      setProducts([...products, product])
-      setNewProduct({ name: "", category: "", price: "", stock: "", description: "", image: "" })
+      };
+      setProducts([...products, product]);
+      setNewProduct({name: '', category: '', price: '', stock: '', description: '', image: ''});
     }
-  }
+  };
 
   const handleDeleteProduct = (id: number) => {
-    setProducts(products.filter((p) => p.id !== id))
-  }
+    setProducts(products.filter((p) => p.id !== id));
+  };
 
   return (
     <div className="min-h-screen bg-creamy-beige p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="font-playfair text-4xl font-bold text-charcoal-gray mb-2">Admin Dashboard</h1>
+          <h1 className="font-playfair text-4xl font-bold text-charcoal-gray mb-2">
+            Admin Dashboard
+          </h1>
           <p className="text-charcoal-gray/70">Manage your products, orders, and store settings</p>
         </div>
 
@@ -77,7 +85,7 @@ export default function AdminDashboard() {
                     <Input
                       id="name"
                       value={newProduct.name}
-                      onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+                      onChange={(e) => setNewProduct({...newProduct, name: e.target.value})}
                       placeholder="Enter product name"
                     />
                   </div>
@@ -85,14 +93,13 @@ export default function AdminDashboard() {
                     <Label htmlFor="category">Category</Label>
                     <Select
                       value={newProduct.category}
-                      onValueChange={(value) => setNewProduct({ ...newProduct, category: value })}
-                    >
+                      onValueChange={(value) => setNewProduct({...newProduct, category: value})}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="Candles">Candles</SelectItem>
-                        <SelectItem value="Scents">Scents</SelectItem>
+                        <SelectItem value="wax">wax</SelectItem>
                         <SelectItem value="Books">Books</SelectItem>
                       </SelectContent>
                     </Select>
@@ -103,7 +110,7 @@ export default function AdminDashboard() {
                       id="price"
                       type="number"
                       value={newProduct.price}
-                      onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+                      onChange={(e) => setNewProduct({...newProduct, price: e.target.value})}
                       placeholder="0.00"
                     />
                   </div>
@@ -113,7 +120,7 @@ export default function AdminDashboard() {
                       id="stock"
                       type="number"
                       value={newProduct.stock}
-                      onChange={(e) => setNewProduct({ ...newProduct, stock: e.target.value })}
+                      onChange={(e) => setNewProduct({...newProduct, stock: e.target.value})}
                       placeholder="0"
                     />
                   </div>
@@ -123,7 +130,7 @@ export default function AdminDashboard() {
                   <Textarea
                     id="description"
                     value={newProduct.description}
-                    onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
+                    onChange={(e) => setNewProduct({...newProduct, description: e.target.value})}
                     placeholder="Enter product description"
                     rows={3}
                   />
@@ -144,8 +151,7 @@ export default function AdminDashboard() {
                   {products.map((product) => (
                     <div
                       key={product.id}
-                      className="flex items-center justify-between p-4 border border-soft-taupe/20 rounded-lg"
-                    >
+                      className="flex items-center justify-between p-4 border border-soft-taupe/20 rounded-lg">
                       <div className="flex-1">
                         <h3 className="font-semibold text-charcoal-gray">{product.name}</h3>
                         <div className="flex items-center gap-4 mt-1">
@@ -165,8 +171,7 @@ export default function AdminDashboard() {
                           variant="outline"
                           size="sm"
                           onClick={() => handleDeleteProduct(product.id)}
-                          className="text-red-600 hover:text-red-700"
-                        >
+                          className="text-red-600 hover:text-red-700">
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -212,5 +217,5 @@ export default function AdminDashboard() {
         </Tabs>
       </div>
     </div>
-  )
+  );
 }

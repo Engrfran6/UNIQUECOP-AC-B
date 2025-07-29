@@ -5,7 +5,7 @@ const categories = [
   {
     name: 'Handmade Candles',
     description:
-      'Our artisanal candles are crafted with 100% natural soy wax, premium essential oils, and hand-poured with care. Each candle burns cleanly for 50+ hours, filling your space with subtle, long-lasting fragrances. Choose from seasonal scents or our signature collection.',
+      'Our artisanal candles are crafted with 100% natural soy wax, premium essential oils, and hand-poured with care. Each candle burns cleanly for 50+ hours, filling your space with subtle, long-lasting fragrances. Choose from seasonal wax or our signature collection.',
     detailedDescription:
       'From our best-selling Vanilla Amber to limited edition seasonal releases, each candle is designed to create ambiance and relaxation. The natural soy wax ensures an even burn while the cotton wicks are crackle-free. Perfect for gifting or treating yourself to moments of tranquility.',
     image: '/candles/c5.webp?height=400&width=600',
@@ -13,13 +13,13 @@ const categories = [
     color: 'muted-gold',
   },
   {
-    name: 'Premium Scents',
+    name: 'Premium wax',
     description:
       'Discover our collection of fine fragrance oils and room sprays, expertly blended to evoke memories and transform moods. Our phthalate-free formulas are designed for both diffusers and direct skin application.',
     detailedDescription:
       'Developed by master perfumers, our scent collection ranges from energizing citrus blends to calming lavender fields. Each 10ml bottle contains approximately 200 drops, lasting 2-3 months with regular use. The perfect way to personalize your space or create signature scent memories.',
-    image: '/scents/s6.webp?height=400&width=600',
-    href: '/products/scents',
+    image: '/wax/s6.webp?height=400&width=600',
+    href: '/products/wax',
     color: 'dusty-rose',
   },
   {
@@ -70,7 +70,7 @@ export default function CategoryShowcase() {
                   </p>
                 </div>
                 <Link href={category.href}>
-                  <button className="btn-accent mt-6 ">Explore {category.name}</button>
+                  <button className="btn-accent mt-6">Explore {category.name}</button>
                 </Link>
               </div>
 
