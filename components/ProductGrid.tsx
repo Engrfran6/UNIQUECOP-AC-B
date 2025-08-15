@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import {Badge} from '@/components/ui/badge';
-import {Card, CardContent} from '@/components/ui/card';
-import {cn, getProductUrl} from '@/lib/utils';
-import Image from 'next/image';
-import Link from 'next/link';
-import {AddToCartButton} from './AddToCartButton';
+import {Badge} from "@/components/ui/badge";
+import {Card, CardContent} from "@/components/ui/card";
+import {cn, getProductUrl} from "@/lib/utils";
+import Image from "next/image";
+import Link from "next/link";
+import {AddToCartButton} from "./AddToCartButton";
 
 export interface Product {
-  id: number | string;
+  id?: number | string;
   name: string;
   price: number;
   originalPrice?: number;
@@ -23,15 +23,15 @@ export interface Product {
 interface ProductGridProps {
   products: Product[];
   classNames?: string;
-  viewMode?: 'grid' | 'list';
+  viewMode?: "grid" | "list";
 }
 
-export default function ProductGrid({products, viewMode = 'grid', classNames}: ProductGridProps) {
+export default function ProductGrid({products, viewMode = "grid", classNames}: ProductGridProps) {
   return (
     <div
       className={cn(
-        'gap-6',
-        viewMode === 'list' ? 'grid-cols-1' : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3',
+        "gap-6",
+        viewMode === "list" ? "grid-cols-1" : "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",
         classNames
       )}>
       {products.map((product) => (
@@ -40,7 +40,7 @@ export default function ProductGrid({products, viewMode = 'grid', classNames}: P
             <CardContent className="p-0">
               <div className="relative overflow-hidden rounded-t-lg">
                 <Image
-                  src={product.image || product.images?.[0] || '/placeholder.svg'}
+                  src={product.image || product.images?.[0] || "/placeholder.svg"}
                   alt={product.name}
                   width={400}
                   height={400}

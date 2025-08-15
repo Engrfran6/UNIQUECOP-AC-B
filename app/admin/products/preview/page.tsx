@@ -1,0 +1,68 @@
+"use client";
+
+import {Badge} from "@/components/ui/badge";
+import {Card, CardContent} from "@/components/ui/card";
+import {useProductStore} from "@/store/use-product-store";
+import Image from "next/image";
+import {useRouter} from "next/navigation";
+
+const ProductsView = () => {
+  const router = useRouter();
+  const {product} = useProductStore();
+
+  if (!product) return router.push("/admin/products");
+
+  return (
+    <section className="space-y-6">
+      <Card className="group card-hover bg-warm-white border-soft-taupe/20 cursor-pointer">
+        <CardContent className="p-0">
+          <div className="relative overflow-hidden rounded-t-lg">
+            <Image
+              src={product.images?.[0] || "/placeholder.svg"}
+              alt={product.name}
+              width={400}
+              height={400}
+              className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+            />
+            {product.badge && (
+              <Badge
+                className="absolute top-3 left-3 bg-muted-gold/90 text-warm-white"
+                variant="secondary">
+                {product.badge}
+              </Badge>
+            )}
+          </div>
+
+          <div className="p-4 space-y-3">
+            <div className="text-sm text-sage-green font-medium">{product.category}</div>
+            <h3 className="font-semibold text-charcoal-gray group-hover:text-sage-green transition-colors">
+              {product.name}
+            </h3>
+            <p className="text-sm text-charcoal-gray/70 line-clamp-2">{product.description}</p>
+
+            {/* Product specific details */}
+            {product.scent && (
+              <div className="text-xs text-charcoal-gray/60">Scent: {product.scent}</div>
+            )}
+            {product.author && (
+              <div className="text-xs text-charcoal-gray/60">By {product.author}</div>
+            )}
+            {product.type && (
+              <div className="text-xs text-charcoal-gray/60">Type: {product.type}</div>
+            )}
+
+            <div className="flex items-center space-x-2">
+              <span className="text-lg font-bold text-charcoal-gray">${product.price}</span>
+              {product.originalPrice && (
+                <span className="text-sm text-charcoal-gray/50 line-through">
+                  ${product.originalPrice}
+                </span>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </section>
+  );
+};
+export default ProductsView;

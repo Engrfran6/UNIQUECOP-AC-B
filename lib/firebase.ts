@@ -6,6 +6,7 @@ import {
   TwitterAuthProvider,
 } from 'firebase/auth';
 import {getFirestore} from 'firebase/firestore';
+import {getFunctions} from 'firebase/functions';
 import {getStorage} from 'firebase/storage';
 
 const firebaseConfig = {
@@ -28,6 +29,7 @@ export const db = getFirestore(app);
 
 // Initialize Cloud Storage and get a reference to the service
 export const storage = getStorage(app);
+export const functions = getFunctions(app);
 
 // Auth providers
 export const googleProvider = new GoogleAuthProvider();

@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import {Button} from '@/components/ui/button';
-import {Sheet, SheetContent, SheetTrigger} from '@/components/ui/sheet';
-import {toast} from '@/components/ui/use-toast';
-import {useAuth} from '@/contexts/AuthContext';
-import {getUserOrders, Order} from '@/lib/orders';
-import {useCartStore} from '@/store/use-cart-store';
-import {useSearchStore} from '@/store/use-search-store';
+import {Button} from "@/components/ui/button";
+import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
+import {toast} from "@/components/ui/use-toast";
+import {useAuth} from "@/contexts/AuthContext";
+import {getUserOrders, Order} from "@/lib/orders";
+import {useCartStore} from "@/store/use-cart-store";
+import {useSearchStore} from "@/store/use-search-store";
 import {
   Loader2,
   LogOut,
@@ -17,21 +17,21 @@ import {
   ShoppingBag,
   Truck,
   User,
-} from 'lucide-react';
-import Link from 'next/link';
-import {usePathname} from 'next/navigation';
-import {useEffect, useState} from 'react';
-import {Avatar, AvatarFallback, AvatarImage} from './ui/avatar';
+} from "lucide-react";
+import Link from "next/link";
+import {usePathname} from "next/navigation";
+import {useEffect, useState} from "react";
+import {Avatar, AvatarFallback, AvatarImage} from "./ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from './ui/dropdown-menu';
+} from "./ui/dropdown-menu";
 
 export default function Header() {
-  const {user, isGuest, logout} = useAuth();
+  const {user, isAdmin, isGuest, logout} = useAuth();
   const pathname = usePathname();
   const {openSearch} = useSearchStore();
 
@@ -49,11 +49,11 @@ export default function Header() {
         const userOrders = await getUserOrders(user.uid);
         setOrders(userOrders);
       } catch (error) {
-        console.error('Error fetching orders:', error);
+        console.error("Error fetching orders:", error);
         toast({
-          title: 'Error loading orders',
-          description: 'Failed to load your orders. Please try again.',
-          variant: 'destructive',
+          title: "Error loading orders",
+          description: "Failed to load your orders. Please try again.",
+          variant: "destructive",
         });
       } finally {
         setIsLoading(false);
@@ -64,19 +64,19 @@ export default function Header() {
   }, [user, toast]);
 
   const navigation = [
-    {name: 'Shops', href: '/products/shop'},
-    {name: 'Candles', href: '/products/candles'},
-    {name: 'Wax Melts', href: '/products/wax'},
-    {name: 'Books', href: '/products/books'},
-    {name: 'Collections', href: '/products/collections'},
-    {name: 'About', href: '/about'},
+    {name: "Shops", href: "/products/shop"},
+    {name: "Candles", href: "/products/candles"},
+    {name: "Wax Melts", href: "/products/wax"},
+    {name: "Books", href: "/products/books"},
+    {name: "Collections", href: "/products/collections"},
   ] as const;
 
   const topNavigation = [
-    {name: 'Contact Us', href: '/contact', icon: Phone},
-    {name: 'Shipping Info', href: '/shipping', icon: Truck},
-    {name: 'Returns', href: '/returns', icon: RotateCcw},
-    {name: 'Size Guide', href: '/size-guide'},
+    {name: "Contact Us", href: "/contact", icon: Phone},
+    {name: "About", href: "/about", icon: User},
+    {name: "Shipping Info", href: "/shipping", icon: Truck},
+    {name: "Returns", href: "/returns", icon: RotateCcw},
+    {name: "Size Guide", href: "/size-guide"},
   ];
 
   const searchableRoutes = [
@@ -89,9 +89,9 @@ export default function Header() {
 
   const getInitials = (name: string) => {
     return name
-      .split(' ')
+      .split(" ")
       .map((n) => n[0])
-      .join('')
+      .join("")
       .toUpperCase();
   };
 
@@ -109,9 +109,14 @@ export default function Header() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="flex items-center space-x-1 text-charcoal-gray/80 hover:text-sage-green transition-colors">
+                  className={`relative flex items-center space-x-1 text-charcoal-gray/80 hover:text-sage-green transition-colors ${
+                    pathname.startsWith(item.href) && "text-muted-gold"
+                  }`}>
                   {item.icon && <item.icon className="h-3 w-3" />}
                   <span>{item.name}</span>
+                  {pathname.startsWith(item.href) && (
+                    <span className="absolute left-0 -bottom-[11px] w-full h-0.5 bg-muted-gold"></span>
+                  )}
                 </Link>
               ))}
             </div>
@@ -124,26 +129,38 @@ export default function Header() {
 
             {/* Right side - User account links */}
             <div className="flex items-center space-x-4">
-              {user && (
-                <Link
-                  href="/orders"
-                  className="flex items-center text-charcoal-gray/80 hover:text-sage-green transition-colors">
-                  My Orders
-                  <sup>
-                    {isLoading ? (
-                      <Loader2 size={10} className="animate-spin" />
-                    ) : (
-                      <span className="h-5 w-5 flex items-center justify-center border rounded-full bg-muted-gold text-white ml-1 text-xs">
-                        {orders.length}
-                      </span>
+              {user && !isGuest && !isAdmin && (
+                <>
+                  <Link
+                    href="/user/orders"
+                    className={`relative flex items-center text-charcoal-gray/80 hover:text-sage-green transition-colors ${
+                      pathname.startsWith("/user/orders") && "text-muted-gold"
+                    }`}>
+                    My Orders
+                    <sup>
+                      {isLoading ? (
+                        <Loader2 size={10} className="animate-spin" />
+                      ) : (
+                        <span className="h-5 w-5 flex items-center justify-center border rounded-full bg-muted-gold text-white ml-1 text-xs">
+                          {orders.length}
+                        </span>
+                      )}
+                    </sup>
+                    {pathname.startsWith("/user/orders") && (
+                      <span className="absolute left-0 -bottom-[11px] w-full h-0.5 bg-muted-gold"></span>
                     )}
-                  </sup>
-                </Link>
+                  </Link>
+                </>
               )}
               <Link
                 href="/our-story"
-                className="hidden md:inline text-charcoal-gray/80 hover:text-sage-green transition-colors">
+                className={`relative  hidden md:inline items-center text-charcoal-gray/80 hover:text-sage-green transition-colors ${
+                  pathname.startsWith("/our-story") && "text-muted-gold"
+                }`}>
                 Our Story
+                {pathname.startsWith("/our-story") && (
+                  <span className="absolute left-0 -bottom-[11px] w-full h-0.5 bg-muted-gold"></span>
+                )}
               </Link>
             </div>
           </div>
@@ -163,7 +180,7 @@ export default function Header() {
                 key={item.name}
                 href={item.href}
                 className={`relative text-charcoal-gray hover:text-sage-green transition-colors font-medium ${
-                  pathname.startsWith(item.href) && 'text-muted-gold'
+                  pathname.startsWith(item.href) && "text-muted-gold"
                 }`}>
                 {item.name}
                 {pathname.startsWith(item.href) && (
@@ -187,45 +204,84 @@ export default function Header() {
             )}
 
             {/* Account */}
+
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={user.photoURL || ''} alt={user.displayName || ''} />
+                      <AvatarImage src={user.photoURL || ""} alt={user.displayName || ""} />
                       <AvatarFallback className="bg-sage-green text-warm-white">
-                        {getInitials(user.displayName || user.email || 'U')}
+                        {getInitials(user.displayName || user.email || "U")}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 bg-white mt-4" align="end" forceMount>
-                  <div className="flex items-center justify-start gap-2 p-2">
-                    <div className="flex flex-col space-y-1 leading-none">
-                      {user.displayName && <p className="font-medium">{user.displayName}</p>}
+                <DropdownMenuContent
+                  className="w-64 bg-white mt-3 rounded-xl shadow-xl border border-soft-taupe/30 p-0"
+                  align="end"
+                  forceMount>
+                  <div className="flex items-center gap-3 px-4 py-3 bg-sage-green/10 rounded-t-xl border-b border-soft-taupe/20">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage src={user.photoURL || ""} alt={user.displayName || ""} />
+                      <AvatarFallback className="bg-sage-green text-warm-white text-lg">
+                        {getInitials(user.displayName || user.email || "U")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex flex-col min-w-0">
+                      {user.displayName && (
+                        <p className="font-semibold text-charcoal-gray truncate">
+                          {user.displayName}
+                        </p>
+                      )}
                       {user.email && (
-                        <p className="w-[200px] truncate text-sm text-muted-foreground">
+                        <p className="w-[160px] truncate text-xs text-muted-foreground">
                           {user.email}
                         </p>
                       )}
                     </div>
                   </div>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="/account" className="cursor-pointer">
-                      <User className="mr-2 h-4 w-4" />
-                      <span>Account</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/orders" className="cursor-pointer">
-                      <ShoppingBag className="mr-2 h-4 w-4" />
-                      <span>Orders</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={logout} className="cursor-pointer">
-                    <LogOut className="mr-2 h-4 w-4" />
+                  <DropdownMenuSeparator className="my-0" />
+                  {!isAdmin && (
+                    <>
+                      <DropdownMenuItem
+                        asChild
+                        className="px-4 py-3 hover:bg-sage-green/10 rounded-none">
+                        <Link
+                          href="/user/account"
+                          className="flex items-center gap-2 text-charcoal-gray/90 hover:text-sage-green transition-colors w-full">
+                          <User className="h-4 w-4" />
+                          <span>My Account</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        asChild
+                        className="px-4 py-3 hover:bg-sage-green/10 rounded-none">
+                        <Link
+                          href="/user/orders"
+                          className={`flex items-center gap-2 text-charcoal-gray/90 hover:text-sage-green transition-colors w-full ${
+                            pathname.startsWith("/user/orders") ? "text-muted-gold" : ""
+                          }`}>
+                          <ShoppingBag className="h-4 w-4" />
+                          <span>My Orders</span>
+                          <sup>
+                            {isLoading ? (
+                              <Loader2 size={10} className="animate-spin ml-1" />
+                            ) : (
+                              <span className="ml-1 h-5 w-5 flex items-center justify-center border rounded-full bg-muted-gold text-white text-xs">
+                                {orders.length}
+                              </span>
+                            )}
+                          </sup>
+                        </Link>
+                      </DropdownMenuItem>
+                    </>
+                  )}
+                  <DropdownMenuSeparator className="my-0" />
+                  <DropdownMenuItem
+                    onClick={logout}
+                    className="px-4 py-3 text-dusty-rose hover:bg-dusty-rose/10 rounded-b-xl cursor-pointer flex items-center gap-2">
+                    <LogOut className="h-4 w-4" />
                     <span>Sign out</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -246,21 +302,21 @@ export default function Header() {
                 </Link>
               </div>
             ) : (
-              <div className="flex items-center gap-8">
+              <div className="flex items-center gap-2">
                 <Link href="/auth/signin">
                   <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-sage-green hover:text-sage-green/80 transition-colors font-medium text-lg">
-                    Sign In
+                    variant="outline"
+                    size="sm"
+                    className="px-5 text-sage-green border-sage-green hover:bg-sage-green/10 hover:text-sage-green transition-colors font-medium rounded-full">
+                    Login
                   </Button>
                 </Link>
                 <Link href="/auth/signup">
                   <Button
-                    variant="secondary"
-                    size="icon"
-                    className="text-dusty-rose hover:text-dusty-rose/80 transition-colors font-medium text-lg">
-                    Sign Up
+                    variant="default"
+                    size="sm"
+                    className="px-5 bg-dusty-rose text-white hover:bg-dusty-rose/90 transition-colors font-medium rounded-full shadow">
+                    Sign up
                   </Button>
                 </Link>
               </div>
@@ -271,6 +327,7 @@ export default function Header() {
               <Button
                 variant="ghost"
                 size="icon"
+                disabled={isAdmin}
                 className="text-charcoal-gray hover:text-sage-green">
                 <ShoppingBag className="h-5 w-5" />
                 {itemCount > 0 && (
@@ -290,14 +347,38 @@ export default function Header() {
               </SheetTrigger>
               <SheetContent side="right" className="bg-warm-white">
                 <nav className="flex flex-col space-y-4 mt-8">
-                  {navigation.map((item) => (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className="text-charcoal-gray hover:text-muted-gold transition-colors font-medium text-lg">
-                      {item.name}
-                    </Link>
-                  ))}
+                  {/* Main Navigation */}
+                  <div className="space-y-4">
+                    <h3 className="font-semibold text-charcoal-gray">Shop</h3>
+                    {navigation.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className="text-charcoal-gray hover:text-muted-gold transition-colors font-medium text-lg block pl-4">
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+
+                  {/* Support Links */}
+                  <div className="space-y-4 pt-4 border-t border-soft-taupe/20">
+                    <h3 className="font-semibold text-charcoal-gray">Support</h3>
+                    {topNavigation.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className="text-charcoal-gray hover:text-sage-green transition-colors font-medium block pl-4">
+                        {item.name}
+                      </Link>
+                    ))}
+                    {!isAdmin && (
+                      <Link
+                        href="/orders"
+                        className="text-charcoal-gray hover:text-sage-green transition-colors font-medium block pl-4">
+                        My Orders
+                      </Link>
+                    )}
+                  </div>
                   {!user && !isGuest && (
                     <>
                       <Link

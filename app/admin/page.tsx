@@ -1,221 +1,291 @@
-'use client';
+"use client";
 
-import {Badge} from '@/components/ui/badge';
-import {Button} from '@/components/ui/button';
-import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-import {Input} from '@/components/ui/input';
-import {Label} from '@/components/ui/label';
+import {Button} from "@/components/ui/button";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import {useAdmin} from "@/contexts/AdminContext";
+
+import {useAuth} from "@/contexts/AuthContext";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-import {Textarea} from '@/components/ui/textarea';
-import {Edit, Plus, Trash2} from 'lucide-react';
-import {useState} from 'react';
+  ArrowUpRight,
+  BarChart3,
+  DollarSign,
+  Eye,
+  Package,
+  Plus,
+  ShoppingCart,
+  TrendingUp,
+  Users,
+} from "lucide-react";
+import Link from "next/link";
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
-export default function AdminDashboard() {
-  const [products, setProducts] = useState([
-    {id: 1, name: 'Vanilla Amber Candle', category: 'Candles', price: 28, stock: 15},
-    {id: 2, name: 'Lavender Dreams Scent', category: 'wax', price: 22, stock: 8},
-    {id: 3, name: 'Mindful Living Book', category: 'Books', price: 18, stock: 12},
-  ]);
+const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7300", "#00ff00"];
 
-  const [newProduct, setNewProduct] = useState({
-    name: '',
-    category: '',
-    price: '',
-    stock: '',
-    description: '',
-    image: '',
-  });
+const AdminDashboard = () => {
+  const {
+    orders,
+    bulkLoading,
+    totalRevenue,
+    totalProducts,
+    conversionRate,
+    salesData,
+    customers,
+    categoryChartData,
+    averageOrderValue,
+    products,
+    statusChartData,
+    handleBulkUpload,
+  } = useAdmin();
+  const {adminData} = useAuth();
 
-  const handleAddProduct = () => {
-    if (newProduct.name && newProduct.category && newProduct.price) {
-      const product = {
-        id: Date.now(),
-        name: newProduct.name,
-        category: newProduct.category,
-        price: Number.parseFloat(newProduct.price),
-        stock: Number.parseInt(newProduct.stock) || 0,
-      };
-      setProducts([...products, product]);
-      setNewProduct({name: '', category: '', price: '', stock: '', description: '', image: ''});
-    }
-  };
-
-  const handleDeleteProduct = (id: number) => {
-    setProducts(products.filter((p) => p.id !== id));
-  };
+  if (!(products || orders || customers)) {
+    return;
+  }
 
   return (
-    <div className="min-h-screen bg-creamy-beige p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="font-playfair text-4xl font-bold text-charcoal-gray mb-2">
-            Admin Dashboard
-          </h1>
-          <p className="text-charcoal-gray/70">Manage your products, orders, and store settings</p>
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+            <p className="text-gray-600">
+              Welcome back, {adminData?.displayName || adminData?.email}
+            </p>
+          </div>
+          <div className="flex gap-3">
+            {/* <Button
+              onClick={handleBulkUpload}
+              disabled={bulkLoading}
+              variant="outline"
+              className="flex items-center gap-2 bg-transparent">
+              <Zap className="h-4 w-4" />
+              {bulkLoading ? "Uploading..." : "Add Sample Data"}
+            </Button> */}
+            <Button asChild className="flex items-center gap-2">
+              <Link href="/admin/products/new">
+                <Plus className="h-4 w-4" />
+                Add Product
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <section className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-blue-600">Total Revenue</p>
+                  <p className="text-3xl font-bold text-blue-900">${totalRevenue.toFixed(2)}</p>
+                  <p className="text-xs text-blue-600 flex items-center mt-1">
+                    <ArrowUpRight className="h-3 w-3 mr-1" />
+                    +12.5% from last month
+                  </p>
+                </div>
+                <div className="h-12 w-12 bg-blue-500 rounded-full flex items-center justify-center">
+                  <DollarSign className="h-6 w-6 text-white" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-green-600">Total Orders</p>
+                  <p className="text-3xl font-bold text-green-900">{orders.length}</p>
+                  <p className="text-xs text-green-600 flex items-center mt-1">
+                    <ArrowUpRight className="h-3 w-3 mr-1" />
+                    +8.2% from last month
+                  </p>
+                </div>
+                <div className="h-12 w-12 bg-green-500 rounded-full flex items-center justify-center">
+                  <ShoppingCart className="h-6 w-6 text-white" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-purple-600">Products</p>
+                  <p className="text-3xl font-bold text-purple-900">{totalProducts}</p>
+                  <p className="text-xs text-purple-600 flex items-center mt-1">
+                    <ArrowUpRight className="h-3 w-3 mr-1" />
+                    +3 new this week
+                  </p>
+                </div>
+                <div className="h-12 w-12 bg-purple-500 rounded-full flex items-center justify-center">
+                  <Package className="h-6 w-6 text-white" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-orange-600">Customers</p>
+                  <p className="text-3xl font-bold text-orange-900">{customers.length}</p>
+                  <p className="text-xs text-orange-600 flex items-center mt-1">
+                    <ArrowUpRight className="h-3 w-3 mr-1" />
+                    +15.3% from last month
+                  </p>
+                </div>
+                <div className="h-12 w-12 bg-orange-500 rounded-full flex items-center justify-center">
+                  <Users className="h-6 w-6 text-white" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
-        <Tabs defaultValue="products" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 bg-warm-white">
-            <TabsTrigger value="products">Products</TabsTrigger>
-            <TabsTrigger value="orders">Orders</TabsTrigger>
-            <TabsTrigger value="customers">Customers</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="products" className="space-y-6">
-            {/* Add Product Form */}
-            <Card className="bg-warm-white">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Plus className="h-5 w-5" />
-                  Add New Product
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Product Name</Label>
-                    <Input
-                      id="name"
-                      value={newProduct.name}
-                      onChange={(e) => setNewProduct({...newProduct, name: e.target.value})}
-                      placeholder="Enter product name"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="category">Category</Label>
-                    <Select
-                      value={newProduct.category}
-                      onValueChange={(value) => setNewProduct({...newProduct, category: value})}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Candles">Candles</SelectItem>
-                        <SelectItem value="wax">wax</SelectItem>
-                        <SelectItem value="Books">Books</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="price">Price ($)</Label>
-                    <Input
-                      id="price"
-                      type="number"
-                      value={newProduct.price}
-                      onChange={(e) => setNewProduct({...newProduct, price: e.target.value})}
-                      placeholder="0.00"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="stock">Stock Quantity</Label>
-                    <Input
-                      id="stock"
-                      type="number"
-                      value={newProduct.stock}
-                      onChange={(e) => setNewProduct({...newProduct, stock: e.target.value})}
-                      placeholder="0"
-                    />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    value={newProduct.description}
-                    onChange={(e) => setNewProduct({...newProduct, description: e.target.value})}
-                    placeholder="Enter product description"
-                    rows={3}
+        {/* Charts Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Sales Chart */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="h-5 w-5" />
+                Sales Overview (Last 7 Days)
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <AreaChart data={salesData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip formatter={(value) => [`$${value}`, "Sales"]} />
+                  <Area
+                    type="monotone"
+                    dataKey="sales"
+                    stroke="#3b82f6"
+                    fill="#3b82f6"
+                    fillOpacity={0.3}
                   />
+                </AreaChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          {/* Category Distribution */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="h-5 w-5" />
+                Product Categories
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={categoryChartData}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value">
+                    {categoryChartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Performance Metrics */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Average Order Value</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    ${averageOrderValue.toFixed(2)}
+                  </p>
                 </div>
-                <Button onClick={handleAddProduct} className="btn-accent">
-                  Add Product
-                </Button>
-              </CardContent>
-            </Card>
+                <TrendingUp className="h-8 w-8 text-green-500" />
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Products List */}
-            <Card className="bg-warm-white">
-              <CardHeader>
-                <CardTitle>Product Inventory</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {products.map((product) => (
-                    <div
-                      key={product.id}
-                      className="flex items-center justify-between p-4 border border-soft-taupe/20 rounded-lg">
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-charcoal-gray">{product.name}</h3>
-                        <div className="flex items-center gap-4 mt-1">
-                          <Badge variant="secondary" className="bg-dusty-rose/15 text-dusty-rose">
-                            {product.category}
-                          </Badge>
-                          <span className="text-sm text-charcoal-gray/70">
-                            ${product.price} • Stock: {product.stock}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Button variant="outline" size="sm">
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleDeleteProduct(product.id)}
-                          className="text-red-600 hover:text-red-700">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Conversion Rate</p>
+                  <p className="text-2xl font-bold text-gray-900">{conversionRate.toFixed(1)}%</p>
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                <Eye className="h-8 w-8 text-blue-500" />
+              </div>
+            </CardContent>
+          </Card>
 
-          <TabsContent value="orders">
-            <Card className="bg-warm-white">
-              <CardHeader>
-                <CardTitle>Recent Orders</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-charcoal-gray/70">Order management coming soon...</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600">Low Stock Items</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {products.filter((p) => p.stockCount <= 5).length}
+                  </p>
+                </div>
+                <Package className="h-8 w-8 text-red-500" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-          <TabsContent value="customers">
-            <Card className="bg-warm-white">
-              <CardHeader>
-                <CardTitle>Customer Management</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-charcoal-gray/70">Customer management coming soon...</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="analytics">
-            <Card className="bg-warm-white">
-              <CardHeader>
-                <CardTitle>Store Analytics</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-charcoal-gray/70">Analytics dashboard coming soon...</p>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
+        {/* Order Status Chart */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <ShoppingCart className="h-5 w-5" />
+              Order Status Distribution
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={statusChartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="value" fill="#3b82f6" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </section>
     </div>
   );
-}
+};
+
+export default AdminDashboard;

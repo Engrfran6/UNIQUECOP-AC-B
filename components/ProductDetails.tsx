@@ -1,27 +1,27 @@
-'use client';
+"use client";
 
-import {Badge} from '@/components/ui/badge';
-import {Button} from '@/components/ui/button';
-import {Card, CardContent} from '@/components/ui/card';
+import {Badge} from "@/components/ui/badge";
+import {Button} from "@/components/ui/button";
+import {Card, CardContent} from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-import {useToast} from '@/hooks/use-toast';
-import {Heart, Minus, Plus, RotateCcw, Share2, Truck} from 'lucide-react';
-import Image from 'next/image';
-import {useState} from 'react';
+} from "@/components/ui/select";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import {useToast} from "@/hooks/use-toast";
+import {Heart, Minus, Plus, RotateCcw, Share2, Truck} from "lucide-react";
+import Image from "next/image";
+import {useState} from "react";
 
-import ProductGrid from '@/components/ProductGrid';
-import {useCartStore} from '@/store/use-cart-store';
-import ZoomableImage from './ZoomableImage';
+import ProductGrid from "@/components/ProductGrid";
+import {useCartStore} from "@/store/use-cart-store";
+import ZoomableImage from "./ZoomableImage";
 
 interface Product {
-  id: number;
+  id?: string;
   name: string;
   price: number;
   originalPrice?: number;
@@ -62,8 +62,8 @@ export default function ProductDetail({product, relatedProducts}: ProductDetailP
     }
 
     toast({
-      title: 'Added to cart!',
-      description: `${quantity} ${product.name}${quantity > 1 ? 's' : ''} added to your cart.`,
+      title: "Added to cart!",
+      description: `${quantity} ${product.name}${quantity > 1 ? "s" : ""} added to your cart.`,
     });
   };
 
@@ -71,8 +71,8 @@ export default function ProductDetail({product, relatedProducts}: ProductDetailP
     handleAddToCart();
     // In a real app, this would redirect to checkout
     toast({
-      title: 'Redirecting to checkout...',
-      description: 'Taking you to complete your purchase.',
+      title: "Redirecting to checkout...",
+      description: "Taking you to complete your purchase.",
     });
   };
 
@@ -85,14 +85,14 @@ export default function ProductDetail({product, relatedProducts}: ProductDetailP
           url: window.location.href,
         });
       } catch (err) {
-        console.log('Error sharing:', err);
+        console.log("Error sharing:", err);
       }
     } else {
       // Fallback: copy to clipboard
       navigator.clipboard.writeText(window.location.href);
       toast({
-        title: 'Link copied!',
-        description: 'Product link copied to clipboard.',
+        title: "Link copied!",
+        description: "Product link copied to clipboard.",
       });
     }
   };
@@ -116,7 +116,7 @@ export default function ProductDetail({product, relatedProducts}: ProductDetailP
           {/* Left Side - Images */}
           <div className="space-y-4">
             <ZoomableImage
-              src={product.images[selectedImage] || '/placeholder.svg'}
+              src={product.images[selectedImage] || "/placeholder.svg"}
               alt={product.name}
               className="w-full h-[600px] object-cover rounded-lg"
             />
@@ -128,10 +128,10 @@ export default function ProductDetail({product, relatedProducts}: ProductDetailP
                     key={index}
                     onClick={() => setSelectedImage(index)}
                     className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors ${
-                      selectedImage === index ? 'border-sage-green' : 'border-soft-taupe/20'
+                      selectedImage === index ? "border-sage-green" : "border-soft-taupe/20"
                     }`}>
                     <Image
-                      src={image || '/placeholder.svg'}
+                      src={image || "/placeholder.svg"}
                       alt={`${product.name} ${index + 1}`}
                       width={80}
                       height={80}
@@ -209,11 +209,11 @@ export default function ProductDetail({product, relatedProducts}: ProductDetailP
             {/* Color/Size Selection */}
             <div className="space-y-3">
               <label className="text-sm font-medium text-charcoal-gray">
-                {product.category === 'Books'
-                  ? 'Format'
-                  : product.category === 'wax'
-                  ? 'Size'
-                  : 'Color'}
+                {product.category === "Books"
+                  ? "Format"
+                  : product.category === "wax"
+                  ? "Size"
+                  : "Color"}
                 :
               </label>
               <Select value={selectedColor} onValueChange={setSelectedColor}>
@@ -272,8 +272,8 @@ export default function ProductDetail({product, relatedProducts}: ProductDetailP
                   variant="outline"
                   size="icon"
                   onClick={() => setIsWishlisted(!isWishlisted)}
-                  className={`${isWishlisted ? 'text-dusty-rose border-dusty-rose' : ''}`}>
-                  <Heart className={`h-5 w-5 ${isWishlisted ? 'fill-current' : ''}`} />
+                  className={`${isWishlisted ? "text-dusty-rose border-dusty-rose" : ""}`}>
+                  <Heart className={`h-5 w-5 ${isWishlisted ? "fill-current" : ""}`} />
                 </Button>
                 <Button variant="outline" size="icon" onClick={handleShare}>
                   <Share2 className="h-5 w-5" />

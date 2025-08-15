@@ -1,25 +1,23 @@
-import {Button} from '@/components/ui/button';
-import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs';
-import {allProducts} from '@/data/data';
-import Link from 'next/link';
-import {useMemo} from 'react';
-import {TabbedProductCard} from './TabbedProductsCard';
+import {Button} from "@/components/ui/button";
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
+import {useProducts} from "@/hooks/use-products";
+import Link from "next/link";
+import {useMemo} from "react";
+import {TabbedProductCard} from "./TabbedProductsCard";
 
 export default function TabbedProducts() {
-  const Products = useMemo(() => {
-    return Object.values(allProducts).flatMap((products: any) => products);
-  }, []);
+  const {data, isLoading, error} = useProducts();
 
   const topRatedProducts = useMemo(() => {
-    return Products.filter((product) => product.topRated).slice(0, 4);
+    return data?.allProducts.filter((product) => product.topRated).slice(0, 4);
   }, []);
 
   const bestSellingProducts = useMemo(() => {
-    return Products.filter((product) => product.bestSelling).slice(0, 4);
+    return data?.allProducts.filter((product) => product.bestSelling).slice(0, 4);
   }, []);
 
   const featuredProducts = useMemo(() => {
-    return Products.filter((product) => product.featured).slice(0, 4);
+    return data?.allProducts.filter((product) => product.featured).slice(0, 4);
   }, []);
 
   return (
@@ -57,7 +55,7 @@ export default function TabbedProducts() {
           <div className="border-t border-muted-gold pt-8">
             <TabsContent value="featured">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {featuredProducts.map((product) => (
+                {featuredProducts?.map((product) => (
                   <TabbedProductCard key={product.id} product={product} />
                 ))}
               </div>
@@ -65,7 +63,7 @@ export default function TabbedProducts() {
 
             <TabsContent value="top-rated">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {topRatedProducts.map((product) => (
+                {topRatedProducts?.map((product) => (
                   <TabbedProductCard key={product.id} product={product} />
                 ))}
               </div>
@@ -73,7 +71,7 @@ export default function TabbedProducts() {
 
             <TabsContent value="best-selling">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {bestSellingProducts.map((product) => (
+                {bestSellingProducts?.map((product) => (
                   <TabbedProductCard key={product.id} product={product} />
                 ))}
               </div>
@@ -82,7 +80,7 @@ export default function TabbedProducts() {
         </Tabs>
 
         <div className="text-center mt-12">
-          <Link href="/products">
+          <Link href="/products/shop">
             <Button variant="outline" className="btn-secondary">
               View All Products
             </Button>

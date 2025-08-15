@@ -1,13 +1,13 @@
-import type {Order} from '@/lib/orders';
+import {Order} from "./types";
 
 export const generateReceiptHTML = (order: Order): string => {
   const formatDate = (date: any) => {
-    if (!date) return 'N/A';
+    if (!date) return "N/A";
     const d = date.toDate ? date.toDate() : new Date(date);
-    return d.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
+    return d.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
@@ -148,8 +148,8 @@ export const generateReceiptHTML = (order: Order): string => {
             <div class="info-content">
               <div>Date: ${formatDate(order.createdAt)}</div>
               <div>Status: <span class="status-badge">${order.status}</span></div>
-              ${order.paymentReference ? `<div>Payment Ref: ${order.paymentReference}</div>` : ''}
-              ${order.trackingNumber ? `<div>Tracking: ${order.trackingNumber}</div>` : ''}
+              ${order.paymentReference ? `<div>Payment Ref: ${order.paymentReference}</div>` : ""}
+              ${order.trackingNumber ? `<div>Tracking: ${order.trackingNumber}</div>` : ""}
             </div>
           </div>
 
@@ -187,7 +187,7 @@ export const generateReceiptHTML = (order: Order): string => {
                     <img src="${item.image}" alt="${item.name}" class="item-image" />
                     <div>
                       <div style="font-weight: bold;">${item.name}</div>
-                      <div style="color: #666; font-size: 14px;">${'item?.category'}</div>
+                      <div style="color: #666; font-size: 14px;">${"item?.category"}</div>
                     </div>
                   </div>
                 </td>
@@ -197,7 +197,7 @@ export const generateReceiptHTML = (order: Order): string => {
               </tr>
             `
               )
-              .join('')}
+              .join("")}
           </tbody>
         </table>
 
@@ -208,7 +208,7 @@ export const generateReceiptHTML = (order: Order): string => {
           </div>
           <div class="total-row">
             <span>Shipping:</span>
-            <span>${order.shipping === 0 ? 'FREE' : `$${order.shipping.toFixed(2)}`}</span>
+            <span>${order.shipping === 0 ? "FREE" : `$${order.shipping.toFixed(2)}`}</span>
           </div>
           <div class="total-row">
             <span>Tax:</span>
@@ -233,10 +233,10 @@ export const generateReceiptHTML = (order: Order): string => {
 
 export const downloadReceipt = (order: Order) => {
   const html = generateReceiptHTML(order);
-  const blob = new Blob([html], {type: 'text/html'});
+  const blob = new Blob([html], {type: "text/html"});
   const url = URL.createObjectURL(blob);
 
-  const link = document.createElement('a');
+  const link = document.createElement("a");
   link.href = url;
   link.download = `uniquecop-receipt-${order.id}.html`;
   document.body.appendChild(link);

@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import gsap from 'gsap';
-import {ScrollTrigger} from 'gsap/ScrollTrigger';
-import Image from 'next/image';
-import Link from 'next/link';
-import {useEffect, useRef} from 'react';
-import {Button} from './ui/button';
+import gsap from "gsap";
+import {ScrollTrigger} from "gsap/ScrollTrigger";
+import Image from "next/image";
+import Link from "next/link";
+import {useEffect, useRef} from "react";
+import {Button} from "./ui/button";
 
 export default function Hero() {
   const bgImageRef = useRef<HTMLDivElement>(null);
@@ -19,11 +19,11 @@ export default function Hero() {
     // Background image parallax (subtle movement)
     gsap.to(bgImageRef.current, {
       y: 150,
-      ease: 'none',
+      ease: "none",
       scrollTrigger: {
         trigger: bgImageRef.current,
-        start: 'top bottom',
-        end: 'bottom top',
+        start: "top bottom",
+        end: "bottom top",
         scrub: 1,
       },
     });
@@ -31,33 +31,33 @@ export default function Hero() {
     // Foreground images parallax (more pronounced)
     gsap.to(mainImageRef.current, {
       y: 80,
-      ease: 'none',
+      ease: "none",
       scrollTrigger: {
         trigger: mainImageRef.current,
-        start: 'top bottom',
-        end: 'bottom top',
+        start: "top bottom",
+        end: "bottom top",
         scrub: true,
       },
     });
 
     gsap.to(bookImageRef.current, {
       y: -60,
-      ease: 'none',
+      ease: "none",
       scrollTrigger: {
         trigger: bookImageRef.current,
-        start: 'top bottom',
-        end: 'bottom top',
+        start: "top bottom",
+        end: "bottom top",
         scrub: true,
       },
     });
 
     gsap.to(scentImageRef.current, {
       y: 40,
-      ease: 'none',
+      ease: "none",
       scrollTrigger: {
         trigger: scentImageRef.current,
-        start: 'top bottom',
-        end: 'bottom top',
+        start: "top bottom",
+        end: "bottom top",
         scrub: true,
       },
     });
@@ -98,7 +98,7 @@ export default function Hero() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/products">
+              <Link href="/products/collections">
                 <button className="btn-accent">Shop Collection</button>
               </Link>
               <Link href="/about">

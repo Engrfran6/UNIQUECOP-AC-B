@@ -1,4 +1,4 @@
-import {db} from '@/lib/firebase';
+import {db} from "@/lib/firebase";
 import {
   addDoc,
   collection,
@@ -10,81 +10,31 @@ import {
   Timestamp,
   updateDoc,
   where,
-} from 'firebase/firestore';
-
-export interface OrderItem {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
-}
-
-export type ShippingMethod = 'standard' | 'express' | 'overnight';
-
-export interface ShippingInfo {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  address: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  country: string;
-}
-
-export interface Order {
-  id?: string;
-  userId: string | null;
-  items: OrderItem[];
-  shippingInfo: ShippingInfo;
-  paymentMethod: {
-    type: 'card' | 'bank_transfer';
-    provider: 'paystack' | 'opay';
-  };
-  subtotal: number;
-  shipping: number;
-  tax: number;
-  total: number;
-  orderNotes?: string;
-  // method: ShippingMethod;
-  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
-  paymentReference?: string;
-  trackingNumber?: string;
-  createdAt?: Timestamp;
-  updatedAt?: Timestamp;
-  timeline?: OrderTimelineEvent[];
-}
-
-export interface OrderTimelineEvent {
-  status: string;
-  date: string;
-  time: string;
-  description?: string;
-}
+} from "firebase/firestore";
+import {Order, OrderTimelineEvent} from "./types";
+import {getStatusDescription} from "./utils";
 
 // Create a new order
 export async function createOrder(
-  orderData: Omit<Order, 'id' | 'createdAt' | 'updatedAt'>
+  orderData: Omit<Order, "id" | "createdAt" | "updatedAt" | "method">
 ): Promise<string> {
   try {
-    const ordersCollection = collection(db, 'orders');
+    const ordersCollection = collection(db, "orders");
 
-    const order: Omit<Order, 'id'> = {
+    const order: Omit<Order, "id" | "method"> = {
       ...orderData,
       createdAt: Timestamp.now(),
       updatedAt: Timestamp.now(),
       timeline: [
         {
-          status: 'ordered',
-          date: new Date().toISOString().split('T')[0],
-          time: new Date().toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit',
+          status: "ordered",
+          date: new Date().toISOString().split("T")[0],
+          time: new Date().toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
             hour12: true,
           }),
-          description: 'Order placed successfully',
+          description: "Order placed successfully",
         },
       ],
     };
@@ -96,15 +46,15 @@ export async function createOrder(
 
     return docRef.id;
   } catch (error) {
-    console.error('Error creating order:', error);
-    throw new Error('Failed to create order');
+    console.error("Error creating order:", error);
+    throw new Error("Failed to create order");
   }
 }
 
 // Get order by ID
 export async function getOrder(orderId: string): Promise<Order | null> {
   try {
-    const orderDoc = doc(db, 'orders', orderId);
+    const orderDoc = doc(db, "orders", orderId);
     const orderSnap = await getDoc(orderDoc);
 
     if (orderSnap.exists()) {
@@ -119,16 +69,16 @@ export async function getOrder(orderId: string): Promise<Order | null> {
 
     return null;
   } catch (error) {
-    console.error('Error getting order:', error);
-    throw new Error('Failed to get order');
+    console.error("Error getting order:", error);
+    throw new Error("Failed to get order");
   }
 }
 
 // Get orders for a specific user
 export async function getUserOrders(userId: string): Promise<Order[]> {
   try {
-    const ordersCollection = collection(db, 'orders');
-    const q = query(ordersCollection, where('userId', '==', userId), orderBy('createdAt', 'desc'));
+    const ordersCollection = collection(db, "orders");
+    const q = query(ordersCollection, where("userId", "==", userId), orderBy("createdAt", "desc"));
 
     const querySnapshot = await getDocs(q);
     const orders: Order[] = [];
@@ -145,23 +95,23 @@ export async function getUserOrders(userId: string): Promise<Order[]> {
 
     return orders;
   } catch (error) {
-    console.error('Error getting user orders:', error);
-    throw new Error('Failed to get user orders');
+    console.error("Error getting user orders:", error);
+    throw new Error("Failed to get user orders");
   }
 }
 
 // Update order status
 export async function updateOrderStatus(
   orderId: string,
-  status: Order['status'],
+  status: Order["status"],
   trackingNumber?: string
 ): Promise<void> {
   try {
-    const orderDoc = doc(db, 'orders', orderId);
+    const orderDoc = doc(db, "orders", orderId);
     const orderSnap = await getDoc(orderDoc);
 
     if (!orderSnap.exists()) {
-      throw new Error('Order not found');
+      throw new Error("Order not found");
     }
 
     const currentOrder = orderSnap.data() as Order;
@@ -170,10 +120,10 @@ export async function updateOrderStatus(
     // Add new timeline event
     const newTimelineEvent: OrderTimelineEvent = {
       status,
-      date: new Date().toISOString().split('T')[0],
-      time: new Date().toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
+      date: new Date().toISOString().split("T")[0],
+      time: new Date().toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
         hour12: true,
       }),
       description: getStatusDescription(status),
@@ -191,42 +141,7 @@ export async function updateOrderStatus(
 
     await updateDoc(orderDoc, updateData);
   } catch (error) {
-    console.error('Error updating order status:', error);
-    throw new Error('Failed to update order status');
+    console.error("Error updating order status:", error);
+    throw new Error("Failed to update order status");
   }
-}
-
-// Get status description for timeline
-function getStatusDescription(status: Order['status']): string {
-  const descriptions = {
-    pending: 'Order is pending payment confirmation',
-    processing: 'Order is being prepared for shipment',
-    shipped: 'Order has been shipped and is on its way',
-    delivered: 'Order has been delivered successfully',
-    cancelled: 'Order has been cancelled',
-  };
-
-  return descriptions[status] || `Order status updated to ${status}`;
-}
-
-// Generate order number
-export function generateOrderNumber(): string {
-  const year = new Date().getFullYear();
-  const timestamp = Date.now().toString().slice(-6);
-  return `ORD-${year}-${timestamp}`;
-}
-
-// Calculate order totals
-export function calculateOrderTotals(items: OrderItem[], shippingCost = 8.99) {
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const shipping = subtotal > 75 ? 0 : shippingCost;
-  const tax = subtotal * 0.08;
-  const total = subtotal + shipping + tax;
-
-  return {
-    subtotal: Number(subtotal.toFixed(2)),
-    shipping: Number(shipping.toFixed(2)),
-    tax: Number(tax.toFixed(2)),
-    total: Number(total.toFixed(2)),
-  };
 }

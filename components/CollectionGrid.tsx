@@ -1,11 +1,11 @@
-import {Card, CardContent} from '@/components/ui/card';
-import {getProductUrl} from '@/lib/utils';
-import Image from 'next/image';
-import Link from 'next/link';
-import {AddToCartButton} from './AddToCartButton';
+import {Card, CardContent} from "@/components/ui/card";
+import {getProductUrl} from "@/lib/utils";
+import Image from "next/image";
+import Link from "next/link";
+import {AddToCartButton} from "./AddToCartButton";
 
 export interface Collection {
-  id: number | string;
+  id?: number | string;
   name: string;
   price: number;
   originalPrice?: number;
@@ -32,7 +32,7 @@ const CollectionGrid = ({currentItems}: CollectionGridProps) => {
           <CardContent className="p-0">
             <div className="relative overflow-hidden">
               <Image
-                src={collection.image || collection.images?.[0] || '/placeholder.svg'}
+                src={collection.image || collection.images?.[0] || "/placeholder.svg"}
                 alt={collection.name}
                 width={600}
                 height={400}

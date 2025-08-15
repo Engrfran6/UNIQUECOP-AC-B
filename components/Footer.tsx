@@ -76,7 +76,7 @@ export default function Footer() {
         <div className="border-t border-warm-white/20 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <div className="flex flex-col items-center md:flex-row space-y-2 md:space-y-0 md:space-x-6">
             <p className="text-warm-white/60 text-sm">
-              © 2024 UNIQUECOP AC&B. All rights reserved.
+              © {new Date().getFullYear()} UNIQUECOP AC&B. All rights reserved.
             </p>
             <p className="text-warm-white/40 text-xs">
               Website created by

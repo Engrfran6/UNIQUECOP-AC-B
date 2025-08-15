@@ -1,35 +1,32 @@
-import Footer from '@/components/Footer';
-import Header from '@/components/Header';
-import {Toaster} from '@/components/ui/toaster';
-import {AuthProvider} from '@/contexts/AuthContext';
-import {CartProvider} from '@/contexts/CartContext';
-import type {Metadata} from 'next';
-import {Inter, Playfair_Display} from 'next/font/google';
-import type React from 'react';
-import './globals.css';
+import {Toaster} from "@/components/ui/toaster";
+import {AuthProvider} from "@/contexts/AuthContext";
+import {CartProvider} from "@/contexts/CartContext";
+import type {Metadata} from "next";
+import {Inter} from "next/font/google";
+import type React from "react";
+import "./globals.css";
+import {Providers} from "./Provider";
 
-const inter = Inter({subsets: ['latin'], variable: '--font-inter'});
-const playfair = Playfair_Display({subsets: ['latin'], variable: '--font-playfair'});
+const inter = Inter({subsets: ["latin"]});
 
 export const metadata: Metadata = {
-  title: 'Uniquecop AC&B Candles - Handcrafted Candles, Scents & Books',
+  title: "Uniquecop AC&B - Premium Handcrafted Candles",
   description:
-    'Discover our collection of handmade candles, premium scents, and curated books. Create the perfect ambiance for your space.',
-  keywords: 'handmade candles, scented candles, aromatherapy, books, home decor',
+    "Discover our collection of premium handcrafted candles, wax melts, and home fragrance accessories.",
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
-      <body className="font-inter bg-warm-white text-charcoal-gray">
-        <AuthProvider>
-          <CartProvider>
-            <Header />
-            {children}
-            <Footer />
-            <Toaster />
-          </CartProvider>
-        </AuthProvider>
+    <html lang="en">
+      <body className={inter.className}>
+        <Providers>
+          <AuthProvider>
+            <CartProvider>
+              {children}
+              <Toaster />
+            </CartProvider>
+          </AuthProvider>
+        </Providers>
       </body>
     </html>
   );

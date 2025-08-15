@@ -1,27 +1,38 @@
-'use client';
+"use client";
 
-import {Button} from '@/components/ui/button';
-import {useToast} from '@/hooks/use-toast';
-import {useCartStore} from '@/store/use-cart-store';
-import {Product} from './ProductGrid';
+import {Button} from "@/components/ui/button";
+import {useAuth} from "@/contexts/AuthContext";
+import {useToast} from "@/hooks/use-toast";
+import {useCartStore} from "@/store/use-cart-store";
+import {Product} from "./ProductGrid";
 
 export function AddToCartButton({product}: {product: Product}) {
   const addItem = useCartStore((state) => state.addItem);
+  const {isAdmin} = useAuth();
   const {toast} = useToast();
 
   const handleAddToCart = (product: Product, e: React.MouseEvent) => {
     e.preventDefault();
 
+    if (isAdmin) {
+      toast({
+        title: "Admin Access",
+        description: "Admins cannot add products to the cart.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     addItem({
-      id: typeof product.id === 'string' ? Number.parseInt(product.id) : product.id,
+      id: typeof product.id === "string" ? Number.parseInt(product.id) : product.id,
       name: product.name,
       price: product.price,
       category: product.category,
-      image: product.image || product.images?.[0] || '/placeholder.svg',
+      image: product.image || product.images?.[0] || "/placeholder.svg",
     });
 
     toast({
-      title: 'Added to cart!',
+      title: "Added to cart!",
       description: `${product.name} has been added to your cart.`,
     });
   };

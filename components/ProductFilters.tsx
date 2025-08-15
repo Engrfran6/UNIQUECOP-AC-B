@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import {Button} from '@/components/ui/button';
-import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-import {Checkbox} from '@/components/ui/checkbox';
-import {Label} from '@/components/ui/label';
-import {Slider} from '@/components/ui/slider';
-import {allProducts} from '@/data/data';
-import {FilterOptions} from '@/hooks/use-products-filter';
-import {Filter} from 'lucide-react';
-import {useMemo, useState} from 'react';
-import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger} from './ui/sheet';
+import {Button} from "@/components/ui/button";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import {Checkbox} from "@/components/ui/checkbox";
+import {Label} from "@/components/ui/label";
+import {Slider} from "@/components/ui/slider";
+import {useProducts} from "@/hooks/use-products";
+import {FilterOptions} from "@/hooks/use-products-filter";
+import {Filter} from "lucide-react";
+import {useMemo, useState} from "react";
+import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger} from "./ui/sheet";
 
 interface ProductFiltersProps {
   category: string;
@@ -27,7 +27,10 @@ export default function ProductFilters({
   onResetFilters,
 }: ProductFiltersProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const products = useMemo(() => allProducts, []);
+  const {data, isLoading, error} = useProducts();
+  const products = useMemo(() => data?.groupedProducts, []);
+
+  if (!products) return [];
 
   const handlePriceChange = (value: number[]) => {
     onFilterChange({priceRange: value as [number, number]});
@@ -49,27 +52,27 @@ export default function ProductFilters({
 
   const getFilters = () => {
     switch (category) {
-      case 'candles':
+      case "candles":
         return {
-          scents: [...new Set(products.candles.map((scent) => scent.scent))],
-          sizes: [...new Set(products.candles.map((scent) => scent.size))],
-          burnTime: [...new Set(products.candles.map((scent) => scent.burnTime))],
+          scents: [...new Set(products?.candles?.map((scent) => scent.scent))],
+          sizes: [...new Set(products?.candles?.map((scent) => scent.size))],
+          burnTime: [...new Set(products.candles?.map((scent) => scent.burnTime))],
         };
-      case 'wax':
+      case "wax":
         return {
-          types: [...new Set(products.wax.map((wax) => wax.type))],
-          volumes: [...new Set(products.wax.map((wax) => wax.volume))],
-          notes: [...new Set(products.wax.map((wax) => wax.notes))],
+          types: [...new Set(products.wax?.map((wax) => wax.type))],
+          volumes: [...new Set(products.wax?.map((wax) => wax.volume))],
+          notes: [...new Set(products.wax?.map((wax) => wax.notes))],
         };
-      case 'books':
+      case "books":
         return {
-          genres: [...new Set(products.books.map((book) => book.genre))],
-          authors: [...new Set(products.books.map((book) => book.author))],
-          pages: [...new Set(products.books.map((book) => book.pages))],
+          genres: [...new Set(products.books?.map((book) => book.genre))],
+          authors: [...new Set(products.books?.map((book) => book.author))],
+          pages: [...new Set(products.books?.map((book) => book.pages))],
         };
-      case 'collections':
+      case "collections":
         return {
-          badges: [...new Set(products.collections.map((collection) => collection.badge))],
+          badges: [...new Set(products.collections?.map((collection) => collection.badge))],
         };
       default:
         return {};
@@ -101,7 +104,7 @@ export default function ProductFilters({
       {Object.entries(filters).map(([filterType, options]) => (
         <div key={filterType} className="space-y-3">
           <Label className="text-sm font-medium capitalize">
-            {filterType.replace(/([A-Z])/g, ' $1').trim()}
+            {filterType.replace(/([A-Z])/g, " $1").trim()}
           </Label>
           <div className="space-y-2">
             {(options as string[]).map((option: string) => (
