@@ -2,10 +2,8 @@
 
 import {Button} from "@/components/ui/button";
 import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
-import {toast} from "@/components/ui/use-toast";
 import {useAuth} from "@/contexts/AuthContext";
-import {getUserOrders} from "@/lib/orders";
-import {Order} from "@/lib/types";
+import {useUserOrders} from "@/hooks/use-orders";
 import {useCartStore} from "@/store/use-cart-store";
 import {useSearchStore} from "@/store/use-search-store";
 import {
@@ -21,7 +19,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import {usePathname} from "next/navigation";
-import {useEffect, useState} from "react";
 import {Avatar, AvatarFallback, AvatarImage} from "./ui/avatar";
 import {
   DropdownMenu,
@@ -38,31 +35,8 @@ export default function UserHeader({title}: {title: string}) {
 
   const items = useCartStore((state) => state.items);
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchOrders = async () => {
-      if (!user) return;
-
-      try {
-        setIsLoading(true);
-        const userOrders = await getUserOrders(user.uid);
-        setOrders(userOrders);
-      } catch (error) {
-        console.error("Error fetching orders:", error);
-        toast({
-          title: "Error loading orders",
-          description: "Failed to load your orders. Please try again.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchOrders();
-  }, [user, toast]);
+  const {data: orders = [], isLoading: isOrdersLoading, isError} = useUserOrders(user?.uid ?? "");
 
   const navigation = [
     {name: "Shops", href: "/products/shop"},
@@ -139,7 +113,7 @@ export default function UserHeader({title}: {title: string}) {
                     }`}>
                     My Orders
                     <sup>
-                      {isLoading ? (
+                      {isOrdersLoading ? (
                         <Loader2 size={10} className="animate-spin" />
                       ) : (
                         <span className="h-5 w-5 flex items-center justify-center border rounded-full bg-muted-gold text-white ml-1 text-xs">
@@ -256,7 +230,7 @@ export default function UserHeader({title}: {title: string}) {
                       <ShoppingBag className="h-4 w-4" />
                       <span>My Orders</span>
                       <sup>
-                        {isLoading ? (
+                        {isOrdersLoading ? (
                           <Loader2 size={10} className="animate-spin ml-1" />
                         ) : (
                           <span className="ml-1 h-5 w-5 flex items-center justify-center border rounded-full bg-muted-gold text-white text-xs">
