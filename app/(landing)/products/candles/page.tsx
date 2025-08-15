@@ -18,7 +18,7 @@ export default function CandlesPage() {
 
   const {data, isLoading, error} = useProducts();
 
-  const initialProducts = useMemo(() => data?.candles, []);
+  const initialProducts = useMemo(() => data?.candles, [data]);
 
   if (!initialProducts) return [];
 

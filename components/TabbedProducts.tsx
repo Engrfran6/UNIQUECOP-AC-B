@@ -10,15 +10,15 @@ export default function TabbedProducts() {
 
   const topRatedProducts = useMemo(() => {
     return data?.allProducts.filter((product) => product.topRated).slice(0, 4);
-  }, []);
+  }, [data]);
 
   const bestSellingProducts = useMemo(() => {
     return data?.allProducts.filter((product) => product.bestSelling).slice(0, 4);
-  }, []);
+  }, [data]);
 
   const featuredProducts = useMemo(() => {
     return data?.allProducts.filter((product) => product.featured).slice(0, 4);
-  }, []);
+  }, [data]);
 
   return (
     <section className="py-16 bg-creamy-beige">

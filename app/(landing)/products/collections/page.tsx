@@ -18,7 +18,7 @@ export default function CollectionsPage() {
   const {isSearchOpen, closeSearch} = useSearchStore();
   const {data, isLoading, error} = useProducts();
 
-  const initialProducts = useMemo(() => data?.collections, []);
+  const initialProducts = useMemo(() => data?.collections, [data]);
   if (!initialProducts) return [];
 
   const {filteredProducts, filters, updateFilters, resetFilters, isSearching, updateSearchQuery} =

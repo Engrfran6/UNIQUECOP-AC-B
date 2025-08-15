@@ -132,7 +132,7 @@ const ProductsPage = () => {
     }
 
     return filtered;
-  }, [selectedCategory, searchQuery, sortBy, filters]);
+  }, [selectedCategory, searchQuery, sortBy, filters, data]);
 
   if (!filteredProducts) return;
 

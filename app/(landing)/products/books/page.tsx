@@ -19,7 +19,7 @@ export default function BooksPage() {
   const {isSearchOpen, closeSearch} = useSearchStore();
   const {data, isLoading, error} = useProducts();
 
-  const initialProducts = useMemo(() => data?.books, []);
+  const initialProducts = useMemo(() => data?.books, [data]);
   if (!initialProducts) return [];
 
   const {filteredProducts, filters, updateFilters, resetFilters, isSearching, updateSearchQuery} =

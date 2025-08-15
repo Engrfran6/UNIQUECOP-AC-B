@@ -4,7 +4,8 @@ import {Button} from "@/components/ui/button";
 import {Sheet, SheetContent, SheetTrigger} from "@/components/ui/sheet";
 import {toast} from "@/components/ui/use-toast";
 import {useAuth} from "@/contexts/AuthContext";
-import {getUserOrders, Order} from "@/lib/orders";
+import {getUserOrders} from "@/lib/orders";
+import {Order} from "@/lib/types";
 import {useCartStore} from "@/store/use-cart-store";
 import {useSearchStore} from "@/store/use-search-store";
 import {
@@ -154,7 +155,7 @@ export default function Header() {
               )}
               <Link
                 href="/our-story"
-                className={`relative  hidden md:inline items-center text-charcoal-gray/80 hover:text-sage-green transition-colors ${
+                className={`relative hidden md:inline items-center text-charcoal-gray/80 hover:text-sage-green transition-colors ${
                   pathname.startsWith("/our-story") && "text-muted-gold"
                 }`}>
                 Our Story

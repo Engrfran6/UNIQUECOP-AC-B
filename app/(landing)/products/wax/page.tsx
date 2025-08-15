@@ -19,7 +19,7 @@ export default function ScentsPage() {
   const {isSearchOpen, closeSearch} = useSearchStore();
   const {data, isLoading, error} = useProducts();
 
-  const initialProducts = useMemo(() => data?.wax, []);
+  const initialProducts = useMemo(() => data?.wax, [data]);
   if (!initialProducts) return [];
 
   const {filteredProducts, filters, updateFilters, resetFilters, isSearching, updateSearchQuery} =
