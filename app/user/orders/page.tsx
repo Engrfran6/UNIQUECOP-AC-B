@@ -203,9 +203,11 @@ const OrdersPage = () => {
                   <CardContent className="space-y-4">
                     {/* Order Items */}
                     <div className="space-y-3">
-                      {order.items.map((item) => (
+                      {order.items.map((item, index) => (
                         <div
-                          key={item.id}
+                          key={
+                            item.id && !Number.isNaN(item.id) ? String(item.id) : `item-${index}`
+                          }
                           className="flex items-center gap-4 p-3 bg-creamy-beige rounded-lg">
                           <Image
                             src={item.image || "/placeholder.svg"}

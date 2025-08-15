@@ -157,8 +157,10 @@ const OrderDetailsPage = ({params}: PageProps) => {
                 <CardTitle>Order Items</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {order.items.map((item) => (
-                  <div key={item.id} className="flex gap-4 p-3 bg-creamy-beige rounded-lg">
+                {order.items.map((item, index) => (
+                  <div
+                    key={item.id ?? `index-${index}`}
+                    className="flex gap-4 p-3 bg-creamy-beige rounded-lg">
                     <Image
                       src={item.image || "/placeholder.svg"}
                       alt={item.name}
@@ -169,12 +171,12 @@ const OrderDetailsPage = ({params}: PageProps) => {
                     <div className="flex-1">
                       <h4 className="font-semibold text-charcoal-gray">{item.name}</h4>
                       <p className="text-sm text-charcoal-gray/70">
-                        Quantity: {item.quantity} × ${item.price.toFixed(2)}
+                        Quantity: {item.quantity} × ${Number(item.price).toFixed(2)}
                       </p>
                     </div>
                     <div className="text-right">
                       <div className="font-semibold text-charcoal-gray">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        ${(Number(item.price) * item.quantity).toFixed(2)}
                       </div>
                     </div>
                   </div>

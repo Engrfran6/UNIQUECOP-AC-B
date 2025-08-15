@@ -23,6 +23,8 @@ export function AddToCartButton({product}: {product: Product}) {
       return;
     }
 
+    if (!product.id) return {};
+
     addItem({
       id: typeof product.id === "string" ? Number.parseInt(product.id) : product.id,
       name: product.name,
