@@ -1,6 +1,6 @@
 import {db} from "@/lib/firebase";
 import {AdminProduct} from "@/lib/types";
-import {collection, getDocs} from "firebase/firestore";
+import {collection, getDocs, orderBy, query} from "firebase/firestore";
 
 export const KNOWN_CATEGORIES = ["candles", "wax", "books", "collections"] as const;
 export type ProductCategory = (typeof KNOWN_CATEGORIES)[number];
@@ -23,7 +23,8 @@ export async function fetchAllAndGroupedProducts(): Promise<{
   const groupedProducts: ProductCategoryType = {};
 
   for (const category of KNOWN_CATEGORIES) {
-    const snapshot = await getDocs(collection(db, category));
+    const q = query(collection(db, category), orderBy("createdAt", "desc"));
+    const snapshot = await getDocs(q);
 
     const items = snapshot.docs.map((doc) => {
       const data = doc.data();
@@ -40,6 +41,15 @@ export async function fetchAllAndGroupedProducts(): Promise<{
 
     groupedProducts[category] = items;
   }
+
+  // 🟡 Ensure allProducts are sorted by createdAt descending
+  allProducts.sort((a, b) => {
+    const aTime =
+      a.createdAt instanceof Date ? a.createdAt.getTime() : new Date(a.createdAt!).getTime();
+    const bTime =
+      b.createdAt instanceof Date ? b.createdAt.getTime() : new Date(b.createdAt!).getTime();
+    return bTime - aTime;
+  });
 
   return {
     allProducts,

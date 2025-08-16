@@ -25,7 +25,7 @@ const ProductsPage = () => {
   const [sortBy, setSortBy] = useState("featured");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [filters, setFilters] = useState({
-    priceRange: [0, 100],
+    priceRange: [0, Infinity],
     inStock: false,
     rating: 0,
     tags: [] as string[],
@@ -62,11 +62,16 @@ const ProductsPage = () => {
   ];
 
   const filteredProducts = useMemo(() => {
-    let filtered = data?.allProducts || [];
+    if (!data?.allProducts) return [];
+
+    // start with filtered array copy
+    let filtered = [...data.allProducts];
 
     // Filter by category
     if (selectedCategory !== "all") {
-      filtered = filtered?.filter((product) => product.category.toLowerCase() === selectedCategory);
+      filtered = filtered?.filter(
+        (product) => product.category?.toLowerCase() === selectedCategory.toLowerCase()
+      );
     }
 
     // Filter by search query

@@ -13,7 +13,7 @@ const ProductsView = () => {
   if (!product) return router.push("/admin/products");
 
   return (
-    <section className="space-y-6">
+    <section className="space-y-6 max-w-[20rem]">
       <Card className="group card-hover bg-warm-white border-soft-taupe/20 cursor-pointer">
         <CardContent className="p-0">
           <div className="relative overflow-hidden rounded-t-lg">

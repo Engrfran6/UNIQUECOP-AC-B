@@ -65,7 +65,7 @@ export default function Header() {
   }, [user, toast]);
 
   const navigation = [
-    {name: "Shops", href: "/products/shop"},
+    {name: "Shop Now", href: "/products/shop"},
     {name: "Candles", href: "/products/candles"},
     {name: "Wax Melts", href: "/products/wax"},
     {name: "Books", href: "/products/books"},
@@ -105,7 +105,7 @@ export default function Header() {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-10 text-sm">
             {/* Left side - Support links */}
-            <div className="hidden md:flex items-center space-x-6">
+            <div className="hidden md:flex items-center space-x-6 navbar">
               {topNavigation.map((item) => (
                 <Link
                   key={item.name}
@@ -123,7 +123,7 @@ export default function Header() {
             </div>
 
             {/* Center - Promotional message */}
-            <div className="text-center text-charcoal-gray/80">
+            <div className="text-center text-charcoal-gray/80 animate-pulse">
               <span className="hidden sm:inline">Free shipping on orders over $50 • </span>
               <span>Handcrafted with love</span>
             </div>
@@ -170,8 +170,13 @@ export default function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="font-playfair text-sm md:text-2xl font-bold text-charcoal-gray">
-            UNIQUECOP AC&B
+          <Link href="/" className="group flex flex-col leading-tight">
+            <span className="font-playfair text-sm md:text-2xl font-bold text-charcoal-gray tracking-wide">
+              UNIQUECOP
+            </span>
+            <span className="text-[10px] italic md:text-xs text-sage-green tracking-wider group-hover:text-muted-gold transition-colors">
+              Artisanal Candles & Books
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -180,7 +185,7 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href}
-                className={`relative text-charcoal-gray hover:text-sage-green transition-colors font-medium ${
+                className={`relative navbar italic text-charcoal-gray hover:text-sage-green transition-colors font-medium ${
                   pathname.startsWith(item.href) && "text-muted-gold"
                 }`}>
                 {item.name}

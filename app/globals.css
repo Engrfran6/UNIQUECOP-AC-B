@@ -31,6 +31,10 @@
   .card-hover {
     @apply transition-transform duration-300 hover:scale-105 hover:shadow-lg;
   }
+
+  .navbar {
+    font-family: var(--font-playfair), serif;
+  }
 }
 
 /* Smooth scrolling performance */
@@ -50,6 +54,16 @@ html {
   .parallax-bg {
     transform: none !important;
   }
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-playfair), serif;
+}
+
+body {
+  font-family: var(--font-inter), sans-serif;
 }
 
 /* @tailwind base;

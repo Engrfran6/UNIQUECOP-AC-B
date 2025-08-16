@@ -4,6 +4,7 @@ import gsap from "gsap";
 import {ScrollTrigger} from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
+import {useRouter} from "next/navigation";
 import {useEffect, useRef} from "react";
 import {Button} from "./ui/button";
 
@@ -12,6 +13,7 @@ export default function Hero() {
   const mainImageRef = useRef<HTMLDivElement>(null);
   const bookImageRef = useRef<HTMLDivElement>(null);
   const scentImageRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -68,7 +70,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-[80vh] flex items-center overflow-hidden">
+    <section className="relative -top-[76px] h-screen flex items-center overflow-hidden">
       {/* Background Image with Parallax */}
       <div ref={bgImageRef} className="absolute inset-0 z-10 w-full h-full">
         <Image
@@ -87,19 +89,17 @@ export default function Hero() {
           <div className="space-y-8">
             <div className="space-y-4">
               <h1 className="font-playfair text-5xl lg:text-6xl font-bold text-charcoal-gray leading-tight">
-                Handcrafted
-                <span className="block text-muted-gold">Candles</span>
-                for Every Moment
+                Welcome to
+                <span className="block text-muted-gold"> UNIQUECOP AC&B</span>
               </h1>
               <p className="text-lg text-charcoal-gray/80 max-w-lg">
-                Discover our collection of artisanal candles, premium wax, and curated books. Create
-                the perfect ambiance for your space with our handmade creations.
+                Candlelight for the soul. Stories that stir something deeper.
               </p>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/products/collections">
-                <button className="btn-accent">Shop Collection</button>
+                <button className="btn-accent">Shop Now</button>
               </Link>
               <Link href="/about">
                 <button className="btn-secondary">Our Story</button>
@@ -120,7 +120,9 @@ export default function Hero() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-muted-gold/20 to-transparent" />
               <div className="absolute inset-0 flex items-center justify-center z-50 opacity-0 group-hover:opacity-100 transition-opacity">
-                <Button className="font-bold text-white text-2xl border-4 border-muted-gold">
+                <Button
+                  onClick={() => router.push("/products/candles")}
+                  className="font-bold text-white text-2xl border-4 border-muted-gold">
                   View candles
                 </Button>
               </div>

@@ -11,7 +11,7 @@ import {Suspense} from "react";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-warm-white">
+    <main className="bg-warm-white">
       <Hero />
       <Suspense fallback={<LoadingSpinner />}>
         <TabbedProducts />

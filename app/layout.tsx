@@ -2,12 +2,13 @@ import {Toaster} from "@/components/ui/toaster";
 import {AuthProvider} from "@/contexts/AuthContext";
 import {CartProvider} from "@/contexts/CartContext";
 import type {Metadata} from "next";
-import {Inter} from "next/font/google";
+import {Inter, Playfair_Display} from "next/font/google";
 import type React from "react";
 import "./globals.css";
 import {Providers} from "./Provider";
 
 const inter = Inter({subsets: ["latin"]});
+const playfair = Playfair_Display({subsets: ["latin"], variable: "--font-playfair"});
 
 export const metadata: Metadata = {
   title: "Uniquecop AC&B - Premium Handcrafted Candles",
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} ${playfair.variable}`}>
         <Providers>
           <AuthProvider>
             <CartProvider>

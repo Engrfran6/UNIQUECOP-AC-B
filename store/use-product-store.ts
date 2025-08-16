@@ -32,14 +32,16 @@ export const useProductStore = create<ProductStore>((set) => ({
   fetchProducts: async () => {
     set({loading: true});
     try {
-      const {allProducts, groupedProducts} = await fetchAllAndGroupedProducts();
+      const {allProducts, groupedProducts, candles, books, wax, collections} =
+        await fetchAllAndGroupedProducts();
+
       set({
         products: allProducts,
         groupedProducts,
-        candles: groupedProducts["candles"] || [],
-        wax: groupedProducts["wax"] || [],
-        books: groupedProducts["books"] || [],
-        collections: groupedProducts["collections"] || [],
+        candles,
+        books,
+        wax,
+        collections,
         loading: false,
       });
     } catch (error) {
