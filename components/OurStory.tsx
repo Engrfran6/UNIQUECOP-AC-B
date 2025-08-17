@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import {Button} from '@/components/ui/button';
-import Link from 'next/link';
-import {useEffect, useRef} from 'react';
+import {Button} from "@/components/ui/button";
+import Link from "next/link";
+import {useEffect, useRef} from "react";
 
 export default function OurStory() {
   const bgRef = useRef<HTMLDivElement>(null);
@@ -15,8 +15,8 @@ export default function OurStory() {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
@@ -26,9 +26,9 @@ export default function OurStory() {
         ref={bgRef}
         className="absolute inset-0 bg-[url('/candles/c1.webp')] bg-cover bg-center"
         style={{
-          backgroundAttachment: 'fixed',
-          willChange: 'background-position',
-          backgroundPositionY: '0px',
+          backgroundAttachment: "fixed",
+          willChange: "background-position",
+          backgroundPositionY: "0px",
         }}>
         <div className="absolute inset-0 bg-gradient-to-b from-charcoal-gray/40 to-charcoal-gray/80" />
       </div>
@@ -55,9 +55,9 @@ export default function OurStory() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
               {[
-                {value: '2019', label: 'Founded'},
-                {value: '10K+', label: 'Happy Customers'},
-                {value: '100%', label: 'Natural Ingredients'},
+                {value: "2019", label: "Founded"},
+                {value: "10K+", label: "Happy Customers"},
+                {value: "100%", label: "Natural Ingredients"},
               ].map((item, index) => (
                 <div key={index} className="text-center">
                   <div className="text-4xl font-bold text-muted-gold mb-2">{item.value}</div>

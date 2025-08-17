@@ -1,63 +1,63 @@
-'use client';
+"use client";
 
-import {Card, CardContent} from '@/components/ui/card';
-import {ChevronLeft, ChevronRight, Star} from 'lucide-react';
-import {useEffect, useState} from 'react';
+import {Card, CardContent} from "@/components/ui/card";
+import {ChevronLeft, ChevronRight, Star} from "lucide-react";
+import {useEffect, useState} from "react";
 
 const testimonials = [
   {
     id: 1,
-    name: 'Precious Okoro',
-    location: 'Lagos, NG',
+    name: "Precious Okoro",
+    location: "Lagos, NG",
     rating: 5,
     text: "The Vanilla Amber candle has completely transformed my evening routine. The scent is absolutely divine and lasts for hours. I've already ordered three more!",
-    product: 'Vanilla Amber Candle',
-    avatar: '/placeholder.svg?height=60&width=60',
+    product: "Vanilla Amber Candle",
+    avatar: "/placeholder.svg?height=60&width=60",
   },
   {
     id: 2,
-    name: 'Michael Owen',
-    location: 'Ph, NG',
+    name: "Michael Akadigbo",
+    location: "Ph, NG",
     rating: 5,
-    text: 'I was skeptical about essential oils, but the Zen Garden blend has become essential for my meditation practice. The quality is outstanding.',
-    product: 'Zen Garden Scent',
-    avatar: '/placeholder.svg?height=60&width=60',
+    text: "I was skeptical about essential oils, but the Zen Garden blend has become essential for my meditation practice. The quality is outstanding.",
+    product: "Zen Garden Scent",
+    avatar: "/placeholder.svg?height=60&width=60",
   },
   {
     id: 3,
-    name: 'Emma Rodriguez',
-    location: 'Austin, TX',
+    name: "Emma Obi Chibueke",
+    location: "Porthacourt, NG",
     rating: 5,
     text: "The Art of Slow Living book came at the perfect time in my life. It's beautifully written and has helped me find peace in the chaos of daily life.",
-    product: 'The Art of Slow Living',
-    avatar: '/placeholder.svg?height=60&width=60',
+    product: "The Art of Slow Living",
+    avatar: "/placeholder.svg?height=60&width=60",
   },
   {
     id: 4,
-    name: 'David Thompson',
-    location: 'Seattle, WA',
+    name: "Francis Uloho Efe",
+    location: "Abuja, NG",
     rating: 5,
     text: "Uniquecop AC&B's candles burn so cleanly and evenly. You can tell they're made with care and quality ingredients. The Rose Garden candle is my favorite!",
-    product: 'Rose Garden Candle',
-    avatar: '/placeholder.svg?height=60&width=60',
+    product: "Rose Garden Candle",
+    avatar: "/placeholder.svg?height=60&width=60",
   },
   {
     id: 5,
-    name: 'Lisa Park',
-    location: 'Chicago, IL',
+    name: "Lisa M. Otti",
+    location: "Ibadan, IB",
     rating: 5,
-    text: 'The customer service is as amazing as the products. My order arrived beautifully packaged and the Lavender Dreams scent helps me sleep so much better.',
-    product: 'Lavender Dreams Scent',
-    avatar: '/placeholder.svg?height=60&width=60',
+    text: "The customer service is as amazing as the products. My order arrived beautifully packaged and the Lavender Dreams scent helps me sleep so much better.",
+    product: "Lavender Dreams Scent",
+    avatar: "/placeholder.svg?height=60&width=60",
   },
   {
     id: 6,
-    name: 'James Wilson',
-    location: 'Miami, FL',
+    name: "James Wilson",
+    location: "Akure, NG",
     rating: 5,
     text: "I've tried many candle brands, but Uniquecop AC&B is in a league of its own. The burn time is incredible and the wax are perfectly balanced.",
-    product: 'Sandalwood Serenity',
-    avatar: '/placeholder.svg?height=60&width=60',
+    product: "Sandalwood Serenity",
+    avatar: "/placeholder.svg?height=60&width=60",
   },
 ];
 
@@ -118,7 +118,7 @@ export default function Testimonials() {
               <Card
                 key={`${testimonial.id}-${index}`}
                 className={`bg-creamy-beige border-soft-taupe/20 transition-all duration-300 ${
-                  index === 0 ? 'scale-105 shadow-lg' : 'scale-100'
+                  index === 0 ? "scale-105 shadow-lg" : "scale-100"
                 }`}>
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
@@ -131,9 +131,9 @@ export default function Testimonials() {
                     <div className="w-12 h-12 bg-sage-green/20 rounded-full flex items-center justify-center mr-4">
                       <span className="text-sage-green font-semibold">
                         {testimonial.name
-                          .split(' ')
+                          .split(" ")
                           .map((n) => n[0])
-                          .join('')}
+                          .join("")}
                       </span>
                     </div>
                     <div>
@@ -163,9 +163,9 @@ export default function Testimonials() {
                   <div className="w-12 h-12 bg-sage-green/20 rounded-full flex items-center justify-center mr-4">
                     <span className="text-sage-green font-semibold">
                       {testimonials[currentIndex].name
-                        .split(' ')
+                        .split(" ")
                         .map((n) => n[0])
-                        .join('')}
+                        .join("")}
                     </span>
                   </div>
                   <div>
@@ -201,7 +201,7 @@ export default function Testimonials() {
                   key={index}
                   onClick={() => goToSlide(index)}
                   className={`w-2 h-2 rounded-full transition-colors ${
-                    index === currentIndex ? 'bg-sage-green' : 'bg-sage-green/30'
+                    index === currentIndex ? "bg-sage-green" : "bg-sage-green/30"
                   }`}
                 />
               ))}
