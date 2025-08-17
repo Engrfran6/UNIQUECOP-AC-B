@@ -16,7 +16,7 @@ import {getStatusDescription} from "./utils";
 
 // Create a new order
 export async function createOrder(
-  orderData: Omit<Order, "id" | "createdAt" | "updatedAt" | "method">
+  orderData: Omit<Order, "id" | "createdAt" | "updatedAt">
 ): Promise<string> {
   try {
     const ordersCollection = collection(db, "orders");

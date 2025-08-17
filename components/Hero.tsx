@@ -70,7 +70,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative -top-[76px] h-screen flex items-center overflow-hidden">
+    <section className="relative md:-top-[76px] h-screen flex items-center overflow-hidden">
       {/* Background Image with Parallax */}
       <div ref={bgImageRef} className="absolute inset-0 z-10 w-full h-full">
         <Image
@@ -97,7 +97,7 @@ export default function Hero() {
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex gap-4">
               <Link href="/products/collections">
                 <button className="btn-accent">Shop Now</button>
               </Link>
