@@ -1,36 +1,4 @@
 import {Timestamp} from "firebase/firestore";
-
-// export interface AdminProduct {
-//   id: string;
-//   name: string;
-//   price: number;
-//   originalPrice?: number;
-//   category: "Candles" | "Wax" | "Books" | "Collections";
-//   description: string;
-//   longDescription: string;
-//   images: string[];
-//   badge?: string;
-//   rating: number;
-//   reviews: number;
-//   inStock: boolean;
-//   stockCount: number;
-//   colors?: string[];
-//   scent?: string;
-//   burnTime?: string;
-//   size?: string;
-//   author?: string;
-//   pages?: string;
-//   genre?: string;
-//   type?: string;
-//   volume?: string;
-//   tags?: string[];
-//   notes?: string;
-//   products?: string[];
-//   href?: string;
-//   createdAt?: Date;
-//   updatedAt?: Date;
-// }
-
 export interface ProductCategoryType {
   candles: AdminProduct[];
   wax: AdminProduct[];
@@ -105,7 +73,7 @@ export interface AdminCustomer {
 }
 
 export interface OrderItem {
-  id: number;
+  id: string;
   name: string;
   price: number;
   quantity: number;

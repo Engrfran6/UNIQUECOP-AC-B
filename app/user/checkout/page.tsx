@@ -16,8 +16,8 @@ import {useCartStore} from "@/store/use-cart-store";
 import {ArrowLeft, Building2, CreditCard, Shield, Truck} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import {useRouter} from "next/navigation";
-import {useEffect, useState} from "react";
+import {useRouter, useSearchParams} from "next/navigation";
+import {useEffect, useMemo, useState} from "react";
 
 interface ShippingInfo {
   firstName: string;
@@ -37,18 +37,16 @@ interface PaymentMethod {
 }
 
 const CheckoutPage = () => {
-  const {items, total: cartTotal, setPendingClearCart} = useCartStore();
+  const {items: cartItems, total: cartTotal, setPendingClearCart} = useCartStore();
   const {user, userData} = useAuth();
   const {toast} = useToast();
   const router = useRouter();
   const createOrderMutation = useCreateOrder();
-
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>({
     type: "card",
     provider: "paystack",
   });
-
   const [shippingInfo, setShippingInfo] = useState<ShippingInfo>({
     firstName: "",
     lastName: "",
@@ -60,14 +58,37 @@ const CheckoutPage = () => {
     zipCode: "",
     country: "Nigeria",
   });
-
   const [orderNotes, setOrderNotes] = useState("");
+  const searchParams = useSearchParams();
+  const [buyNowProduct, setBuyNowProduct] = useState<any>(null);
+
+  const items = useMemo(() => {
+    return buyNowProduct ? [buyNowProduct] : cartItems;
+  }, [buyNowProduct, cartItems]);
 
   // Calculate totals
-  const subtotal = cartTotal;
+  const subtotal = useMemo(() => {
+    return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  }, [items]);
+
   const shipping = subtotal > 75 ? 0 : 8.99;
   const tax = subtotal * 0.08;
   const total = subtotal + shipping + tax;
+
+  useEffect(() => {
+    const buyNow = searchParams.get("buyNow");
+    if (buyNow === "true") {
+      const product = {
+        id: searchParams.get("id"),
+        name: searchParams.get("name"),
+        price: Number(searchParams.get("price")),
+        image: searchParams.get("image"),
+        category: searchParams.get("category"),
+        quantity: 1,
+      };
+      setBuyNowProduct(product);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (items.length === 0) {
@@ -510,7 +531,7 @@ const CheckoutPage = () => {
                     onClick={handleCheckout}
                     disabled={isProcessing}
                     variant="ghost"
-                    className="w-full btn-accent py-3 text-lg font-medium  rounded-full hover:border hover:btn-accent/20 transition-colors">
+                    className="w-full btn-accent py-3 text-lg font-medium  rounded hover:border hover:text-muted-gold hover:btn-accent/20 transition-colors">
                     {isProcessing ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-warm-white mr-2"></div>

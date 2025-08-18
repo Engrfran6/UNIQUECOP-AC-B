@@ -41,8 +41,9 @@ export function AddToCartButton({product}: {product: Product}) {
 
   return (
     <Button
-      className="w-full btn-accent hover:border rounded-full border-muted-gold"
-      onClick={(e) => handleAddToCart(product, e)}>
+      className="w-full  border bg-muted-gold text-white hover:bg-muted-gold/70 hover:text-white rounded"
+      onClick={(e) => handleAddToCart(product, e)}
+      disabled={!product.inStock}>
       Add to Cart
     </Button>
   );

@@ -18,7 +18,10 @@ import {useState} from "react";
 
 import ProductGrid from "@/components/ProductGrid";
 import {useCartStore} from "@/store/use-cart-store";
+import {useRouter} from "next/navigation";
 import ZoomableImage from "./ZoomableImage";
+import {AddToCartButton} from "./cart/AddToCartButton";
+import {BuyItNowButton} from "./cart/BuyItNow";
 
 interface Product {
   id: string;
@@ -46,6 +49,7 @@ export default function ProductDetail({product, relatedProducts}: ProductDetailP
   const [selectedColor, setSelectedColor] = useState(product.colors[0]);
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const router = useRouter();
 
   const addItem = useCartStore((state) => state.addItem);
   const {toast} = useToast();
@@ -69,7 +73,7 @@ export default function ProductDetail({product, relatedProducts}: ProductDetailP
 
   const handleBuyNow = () => {
     handleAddToCart();
-    // In a real app, this would redirect to checkout
+    router.push("/user/checkout");
     toast({
       title: "Redirecting to checkout...",
       description: "Taking you to complete your purchase.",
@@ -262,12 +266,7 @@ export default function ProductDetail({product, relatedProducts}: ProductDetailP
             {/* Action Buttons */}
             <div className="space-y-3">
               <div className="flex gap-3">
-                <Button
-                  onClick={handleAddToCart}
-                  disabled={!product.inStock}
-                  className="flex-1 btn-accent">
-                  Add to Cart
-                </Button>
+                <AddToCartButton product={product} />
                 <Button
                   variant="outline"
                   size="icon"
@@ -280,13 +279,7 @@ export default function ProductDetail({product, relatedProducts}: ProductDetailP
                 </Button>
               </div>
 
-              <Button
-                onClick={handleBuyNow}
-                disabled={!product.inStock}
-                className="w-full btn-primary"
-                size="lg">
-                Buy It Now
-              </Button>
+              <BuyItNowButton product={product} />
             </div>
 
             {/* Delivery & Returns */}
