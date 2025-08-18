@@ -70,21 +70,21 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative md:-top-[76px] h-screen flex items-center overflow-hidden">
+    <section className="relative h-screen flex items-center overflow-hidden">
       {/* Background Image with Parallax */}
-      <div ref={bgImageRef} className="absolute inset-0 z-10 w-full h-full">
+      <div ref={bgImageRef} className="absolute inset-0 w-full h-full -top-[76px]">
         <Image
           src="/hero/hero_bg.webp" // Use your background image path
           alt="Background texture"
           fill
-          className="object-cover"
+          className="object-cover "
           quality={100}
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-r from-warm-white/70 via-warm-white/20 to-warm-white/70" />
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 relative z-10 pt-32 md:-mt-56">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
             <div className="space-y-4">
@@ -102,7 +102,7 @@ export default function Hero() {
                 <button className="btn-accent">Shop Now</button>
               </Link>
               <Link href="/about">
-                <button className="btn-secondary">Our Story</button>
+                <button className="btn-primary">Our Story</button>
               </Link>
             </div>
           </div>

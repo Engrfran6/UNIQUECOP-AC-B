@@ -99,7 +99,7 @@ export default function Header() {
   const isSearch = searchableRoutes.some((route) => pathname.startsWith(route));
 
   return (
-    <header className="sticky top-0 z-50 bg-muted-gold/20 backdrop-blur-sm border-b border-soft-taupe/20">
+    <header className="sticky top-0 z-50 bg-white backdrop-blur-sm border-b border-soft-taupe/20">
       {/* Top Navigation Bar */}
       <div className="bg-sage-green/10 border-b border-sage-green/20">
         <div className="container mx-auto px-4">
@@ -308,7 +308,7 @@ export default function Header() {
                 </Link>
               </div>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="hidden md:flex items-center gap-2">
                 <Link href="/auth/signin">
                   <Button
                     variant="outline"
@@ -321,7 +321,7 @@ export default function Header() {
                   <Button
                     variant="default"
                     size="sm"
-                    className="px-5 bg-dusty-rose text-white hover:bg-dusty-rose/90 transition-colors font-medium rounded-full shadow">
+                    className="px-4 bg-muted-gold text-white hover:bg-dusty-rose/90 transition-colors font-medium rounded-full shadow">
                     Sign up
                   </Button>
                 </Link>
@@ -347,20 +347,23 @@ export default function Header() {
             {/* Mobile Menu */}
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="md:hidden text-charcoal-gray">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="md:hidden text-charcoal-gray bg-muted-foreground">
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-warm-white">
+              <SheetContent side="right" className="bg-warm-white/90">
                 <nav className="flex flex-col space-y-4 mt-8">
                   {/* Main Navigation */}
                   <div className="space-y-4">
-                    <h3 className="font-semibold text-charcoal-gray">Shop</h3>
+                    <h3 className="font-semibold text-muted-gold">Shop</h3>
                     {navigation.map((item) => (
                       <Link
                         key={item.name}
                         href={item.href}
-                        className="text-charcoal-gray hover:text-muted-gold transition-colors font-medium text-lg block pl-4">
+                        className="text-charcoal-gray hover:text-muted-gold transition-colors font-medium text-sm block pl-4 navbar">
                         {item.name}
                       </Link>
                     ))}
@@ -368,12 +371,12 @@ export default function Header() {
 
                   {/* Support Links */}
                   <div className="space-y-4 pt-4 border-t border-soft-taupe/20">
-                    <h3 className="font-semibold text-charcoal-gray">Support</h3>
+                    <h3 className="font-semibold text-muted-gold">Support</h3>
                     {topNavigation.map((item) => (
                       <Link
                         key={item.name}
                         href={item.href}
-                        className="text-charcoal-gray hover:text-sage-green transition-colors font-medium block pl-4">
+                        className="text-charcoal-gray text-sm hover:text-sage-green transition-colors font-medium block pl-4 navbar">
                         {item.name}
                       </Link>
                     ))}
@@ -387,15 +390,21 @@ export default function Header() {
                   </div>
                   {!user && !isGuest && (
                     <>
-                      <Link
-                        href="/auth/signin"
-                        className="text-sage-green hover:text-sage-green/80 transition-colors font-medium text-lg">
-                        Sign In
+                      <Link href="/auth/signin">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="px-5 text-sage-green w-full border-sage-green hover:bg-sage-green/10 hover:text-sage-green transition-colors font-medium rounded-full">
+                          Login
+                        </Button>
                       </Link>
-                      <Link
-                        href="/auth/signup"
-                        className="text-dusty-rose hover:text-dusty-rose/80 transition-colors font-medium text-lg">
-                        Sign Up
+                      <Link href="/auth/signup">
+                        <Button
+                          variant="default"
+                          size="sm"
+                          className="px-4 bg-muted-gold w-full text-white hover:bg-dusty-rose/90 transition-colors font-medium rounded-full shadow">
+                          Sign up
+                        </Button>
                       </Link>
                     </>
                   )}
