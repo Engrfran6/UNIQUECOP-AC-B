@@ -1,6 +1,5 @@
 import {Toaster} from "@/components/ui/toaster";
 import {AuthProvider} from "@/contexts/AuthContext";
-import {CartProvider} from "@/contexts/CartContext";
 import type {Metadata} from "next";
 import {Inter, Playfair_Display} from "next/font/google";
 import type React from "react";
@@ -22,10 +21,8 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
       <body className={`${inter.className} ${playfair.variable}`}>
         <Providers>
           <AuthProvider>
-            <CartProvider>
-              {children}
-              <Toaster />
-            </CartProvider>
+            {children}
+            <Toaster />
           </AuthProvider>
         </Providers>
       </body>

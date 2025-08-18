@@ -39,7 +39,7 @@ export interface ProductCategoryType {
 }
 
 export interface AdminProduct {
-  id?: string;
+  id: string;
   name: string;
   price: number;
   originalPrice: number | undefined;

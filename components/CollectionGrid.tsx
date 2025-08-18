@@ -2,7 +2,7 @@ import {Card, CardContent} from "@/components/ui/card";
 import {getProductUrl} from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import {AddToCartButton} from "./AddToCartButton";
+import {AddToCartButton} from "./cart/AddToCartButton";
 
 export interface Collection {
   id?: number | string;

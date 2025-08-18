@@ -21,7 +21,7 @@ import {useCartStore} from "@/store/use-cart-store";
 import ZoomableImage from "./ZoomableImage";
 
 interface Product {
-  id?: string;
+  id: string;
   name: string;
   price: number;
   originalPrice?: number;
@@ -53,7 +53,7 @@ export default function ProductDetail({product, relatedProducts}: ProductDetailP
   const handleAddToCart = () => {
     for (let i = 0; i < quantity; i++) {
       addItem({
-        id: Number(product.id),
+        id: product.id,
         name: product.name,
         price: product.price,
         category: product.category,

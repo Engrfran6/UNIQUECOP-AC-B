@@ -4,7 +4,7 @@ import {Button} from "@/components/ui/button";
 import {useAuth} from "@/contexts/AuthContext";
 import {useToast} from "@/hooks/use-toast";
 import {useCartStore} from "@/store/use-cart-store";
-import {Product} from "./ProductGrid";
+import {Product} from "../ProductGrid";
 
 export function AddToCartButton({product}: {product: Product}) {
   const addItem = useCartStore((state) => state.addItem);
@@ -26,7 +26,7 @@ export function AddToCartButton({product}: {product: Product}) {
     if (!product.id) return {};
 
     addItem({
-      id: typeof product.id === "string" ? Number.parseInt(product.id) : product.id,
+      id: product.id,
       name: product.name,
       price: product.price,
       category: product.category,

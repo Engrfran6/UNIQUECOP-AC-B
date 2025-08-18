@@ -1,21 +1,21 @@
-'use client';
+"use client";
 
-import type React from 'react';
+import type React from "react";
 
-import {Button} from '@/components/ui/button';
-import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-import {Input} from '@/components/ui/input';
-import {Label} from '@/components/ui/label';
-import {Separator} from '@/components/ui/separator';
-import {useAuth} from '@/contexts/AuthContext';
-import {ArrowLeft, Eye, EyeOff, Lock, Mail} from 'lucide-react';
-import Link from 'next/link';
-import {useRouter} from 'next/navigation';
-import {useState} from 'react';
+import {Button} from "@/components/ui/button";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import {Input} from "@/components/ui/input";
+import {Label} from "@/components/ui/label";
+import {Separator} from "@/components/ui/separator";
+import {useAuth} from "@/contexts/AuthContext";
+import {ArrowLeft, Eye, EyeOff, Lock, Mail} from "lucide-react";
+import Link from "next/link";
+import {useRouter} from "next/navigation";
+import {useState} from "react";
 
 const SignInPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [resetEmailSent, setResetEmailSent] = useState(false);
@@ -37,30 +37,30 @@ const SignInPage = () => {
 
     try {
       await signIn(email, password);
-      router.push('/');
+      router.back();
     } catch (error) {
-      console.error('Sign in error:', error);
+      console.error("Sign in error:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSocialSignIn = async (provider: 'google' | 'facebook' | 'twitter') => {
+  const handleSocialSignIn = async (provider: "google" | "facebook" | "twitter") => {
     setIsLoading(true);
 
     try {
       switch (provider) {
-        case 'google':
+        case "google":
           await signInWithGoogle();
           break;
-        case 'facebook':
+        case "facebook":
           await signInWithFacebook();
           break;
-        case 'twitter':
+        case "twitter":
           await signInWithTwitter();
           break;
       }
-      router.push('/');
+      router.back();
     } catch (error) {
       console.error(`${provider} sign in error:`, error);
     } finally {
@@ -77,13 +77,13 @@ const SignInPage = () => {
       await resetPassword(email);
       setResetEmailSent(true);
     } catch (error) {
-      console.error('Password reset error:', error);
+      console.error("Password reset error:", error);
     }
   };
 
   const handleContinueAsGuest = () => {
     continueAsGuest();
-    router.push('/');
+    router.back();
   };
 
   return (
@@ -109,7 +109,7 @@ const SignInPage = () => {
             {/* Social Sign In */}
             <div className="space-y-3">
               <Button
-                onClick={() => handleSocialSignIn('google')}
+                onClick={() => handleSocialSignIn("google")}
                 disabled={isLoading}
                 variant="outline"
                 className="w-full border-soft-taupe/30 hover:bg-creamy-beige">
@@ -135,7 +135,7 @@ const SignInPage = () => {
               </Button>
 
               <Button
-                onClick={() => handleSocialSignIn('facebook')}
+                onClick={() => handleSocialSignIn("facebook")}
                 disabled={isLoading}
                 variant="outline"
                 className="w-full border-soft-taupe/30 hover:bg-creamy-beige">
@@ -146,7 +146,7 @@ const SignInPage = () => {
               </Button>
 
               <Button
-                onClick={() => handleSocialSignIn('twitter')}
+                onClick={() => handleSocialSignIn("twitter")}
                 disabled={isLoading}
                 variant="outline"
                 className="w-full border-soft-taupe/30 hover:bg-creamy-beige">
@@ -188,7 +188,7 @@ const SignInPage = () => {
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-charcoal-gray/50" />
                   <Input
                     id="password"
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
@@ -210,12 +210,12 @@ const SignInPage = () => {
                   onClick={handleResetPassword}
                   className="text-sm text-sage-green hover:text-sage-green/80"
                   disabled={!email || resetEmailSent}>
-                  {resetEmailSent ? 'Reset email sent!' : 'Forgot password?'}
+                  {resetEmailSent ? "Reset email sent!" : "Forgot password?"}
                 </button>
               </div>
 
               <Button type="submit" disabled={isLoading} className="w-full btn-accent">
-                {isLoading ? 'Signing in...' : 'Sign In'}
+                {isLoading ? "Signing in..." : "Sign In"}
               </Button>
             </form>
 
@@ -232,7 +232,7 @@ const SignInPage = () => {
             )}
 
             <div className="text-center text-sm text-charcoal-gray/70">
-              Don't have an account?{' '}
+              Don't have an account?{" "}
               <Link
                 href="/auth/signup"
                 className="text-sage-green hover:text-sage-green/80 font-medium">

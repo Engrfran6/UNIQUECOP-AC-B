@@ -28,7 +28,7 @@ export default function CartTemplate() {
   const tax = (subtotal - promoDiscount) * 0.08;
   const total = subtotal - promoDiscount + shipping + tax;
 
-  const handleQuantityChange = (id: number, newQuantity: number) => {
+  const handleQuantityChange = (id: string, newQuantity: number) => {
     if (newQuantity < 1) {
       removeItem(id);
       toast({
@@ -40,7 +40,7 @@ export default function CartTemplate() {
     }
   };
 
-  const handleRemoveItem = (id: number, name: string) => {
+  const handleRemoveItem = (id: string, name: string) => {
     removeItem(id);
     toast({
       title: "Item removed",
@@ -73,6 +73,8 @@ export default function CartTemplate() {
   if (items.length === 0) {
     return <EmptyCartState />;
   }
+
+  console.log("Cart items:", items);
 
   return (
     <div className="min-h-screen bg-warm-white py-8">

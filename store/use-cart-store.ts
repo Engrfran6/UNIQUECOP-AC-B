@@ -1,9 +1,9 @@
 // stores/use-cart-store.ts
-import {create} from 'zustand';
-import {persist} from 'zustand/middleware';
+import {create} from "zustand";
+import {persist} from "zustand/middleware";
 
 export interface CartItem {
-  id: number;
+  id: string;
   name: string;
   price: number;
   quantity: number;
@@ -14,9 +14,9 @@ export interface CartItem {
 interface CartState {
   items: CartItem[];
   total: number;
-  addItem: (item: Omit<CartItem, 'quantity'>) => void;
-  removeItem: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
+  addItem: (item: Omit<CartItem, "quantity">) => void;
+  removeItem: (id: string) => void;
+  updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
   setPendingClearCart: (pending: boolean) => void;
   pendingClearCart?: boolean;
@@ -59,7 +59,7 @@ export const useCartStore = create<CartState>()(
           };
         }),
 
-      updateQuantity: (id: number, quantity: number) =>
+      updateQuantity: (id: string, quantity: number) =>
         set((state) => {
           const newItems = state.items
             .map((i) => (i.id === id ? {...i, quantity} : i))
@@ -76,7 +76,7 @@ export const useCartStore = create<CartState>()(
         set((state) => ({...state, pendingClearCart: pending})),
     }),
     {
-      name: 'cart-storage',
+      name: "cart-storage",
     }
   )
 );

@@ -1,15 +1,15 @@
-import {Button} from '@/components/ui/button';
-import {Card, CardContent} from '@/components/ui/card';
-import {getProductUrl} from '@/lib/utils';
-import {CartItem} from '@/store/use-cart-store';
-import {ArrowUpRightIcon, Minus, Plus, Trash2} from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
+import {Button} from "@/components/ui/button";
+import {Card, CardContent} from "@/components/ui/card";
+import {getProductUrl} from "@/lib/utils";
+import {CartItem} from "@/store/use-cart-store";
+import {ArrowUpRightIcon, Minus, Plus, Trash2} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
 interface Cart {
   item: CartItem;
-  handleRemoveItem: (id: number, name: string) => void;
-  handleQuantityChange: (id: number, quantity: number) => void;
+  handleRemoveItem: (id: string, name: string) => void;
+  handleQuantityChange: (id: string, quantity: number) => void;
 }
 
 const CartCard = ({item, handleRemoveItem, handleQuantityChange}: Cart) => {
@@ -20,7 +20,7 @@ const CartCard = ({item, handleRemoveItem, handleQuantityChange}: Cart) => {
           {/* Product Image */}
           <div className="flex-shrink-0">
             <Image
-              src={item.image || '/placeholder.svg'}
+              src={item.image || "/placeholder.svg"}
               alt={item.name}
               width={120}
               height={120}
@@ -41,7 +41,7 @@ const CartCard = ({item, handleRemoveItem, handleQuantityChange}: Cart) => {
                   </h3>
                 </Link>
                 <div className="text-sm text-charcoal-gray/70">
-                  SKU: #{item.id.toString().padStart(6, '0')}
+                  SKU: #{item.id.toString().padStart(6, "0")}
                 </div>
               </div>
               <Button

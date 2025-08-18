@@ -1,8 +1,8 @@
-import {Button} from '@/components/ui/button';
-import {Card, CardContent, CardHeader, CardTitle} from '@/components/ui/card';
-import {Separator} from '@/components/ui/separator';
-import {CartItem} from '@/store/use-cart-store';
-import {Gift, Shield, Truck} from 'lucide-react';
+import {Button} from "@/components/ui/button";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import {Separator} from "@/components/ui/separator";
+import {CartItem} from "@/store/use-cart-store";
+import {Gift, Shield, Truck} from "lucide-react";
 
 interface OrderSummaryProps {
   items: CartItem[];
@@ -50,7 +50,7 @@ const OrderSummary = ({
 
             <div className="flex justify-between text-charcoal-gray">
               <span>Shipping</span>
-              <span>{shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}</span>
+              <span>{shipping === 0 ? "FREE" : `$${shipping.toFixed(2)}`}</span>
             </div>
 
             <div className="flex justify-between text-charcoal-gray">
@@ -88,8 +88,8 @@ const OrderSummary = ({
           <Button
             onClick={handleCheckout}
             disabled={isCheckingOut}
-            className="w-full btn-accent py-3 text-lg font-medium">
-            {isCheckingOut ? 'Processing...' : 'Proceed to Checkout'}
+            className="w-full btn-accent border text-muted-gold rounded hover:bg-muted-gold hover:text-white py-3 text-lg font-medium">
+            {isCheckingOut ? "Processing..." : "Proceed to Checkout"}
           </Button>
 
           {/* Security & Guarantees */}
@@ -112,7 +112,7 @@ const OrderSummary = ({
           <div className="pt-4 border-t border-soft-taupe/20">
             <div className="text-sm text-charcoal-gray/70 mb-2">We accept:</div>
             <div className="flex gap-2">
-              {['Visa', 'MC', 'Amex', 'PayPal'].map((method) => (
+              {["Visa", "MC", "Amex", "PayPal"].map((method) => (
                 <div
                   key={method}
                   className="px-2 py-1 bg-soft-taupe/20 rounded text-xs text-charcoal-gray/60">

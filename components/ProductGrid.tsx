@@ -5,10 +5,10 @@ import {Card, CardContent} from "@/components/ui/card";
 import {cn, getProductUrl} from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import {AddToCartButton} from "./AddToCartButton";
+import {AddToCartButton} from "./cart/AddToCartButton";
 
 export interface Product {
-  id?: number | string;
+  id: string;
   name: string;
   price: number;
   originalPrice?: number;

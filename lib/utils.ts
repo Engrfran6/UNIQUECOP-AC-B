@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export const getProductUrl = (product: Product | CartItem) => {
+export const getProductUrl = (product: CartItem | Product) => {
   const category = product?.category?.toLowerCase();
   return `/products/${category}/${product.id}`;
 };
